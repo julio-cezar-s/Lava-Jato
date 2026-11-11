@@ -83,16 +83,12 @@ const INSTAGRAM = "";  // opcional: link completo do perfil, ex.: https://instag
 
 <div id="aviso" class="aviso oculto" role="alert"></div>
 <div id="recado" class="aviso oculto" role="status"></div>
-<header id="topo"><h1 id="titulo">Lava-Jato</h1><p>Escolha o serviço, o horário e a gente confirma pelo WhatsApp.</p></header>
+<header id="topo" data-secao="inicio"><h1 id="titulo">Lava-Jato</h1><p>Escolha o serviço, o horário e a gente confirma pelo WhatsApp.</p></header>
 <nav id="menu" aria-label="Navegação principal"><div class="mi"><a href="#topo" data-alvo="topo">Início</a><a href="#sec-servicos" data-alvo="sec-servicos">Serviços</a><a href="#sec-aval" data-alvo="sec-aval">Avaliações</a><a href="#sec-pedido" data-alvo="sec-pedido">Pedir lavagem</a><a href="#sec-acomp" data-alvo="sec-acomp">Acompanhar pedido</a><a href="#sec-contato" data-alvo="sec-contato">Contato</a></div></nav>
 <main>
 <!-- CLIENTE -->
 <section id="cliente">
-  <h2 id="sec-servicos">Serviços e valores</h2>
-  <div id="lista"></div>
-  <h2 id="sec-aval">Avaliações de clientes</h2>
-  <div id="avres"></div><div id="aval"></div>
-  <button class="sec oculto" id="avmais" style="width:100%">Ver mais avaliações</button>
+  <section data-secao="inicio" aria-labelledby="sec-pedido">
   <h2 id="sec-pedido">Pedir lavagem</h2>
   <div id="repetir" class="card oculto"></div>
   <form id="form" onsubmit="return false">
@@ -110,12 +106,24 @@ const INSTAGRAM = "";  // opcional: link completo do perfil, ex.: https://instag
     <p><small>Usamos seu nome e telefone só para agendar e confirmar a lavagem.</small></p>
   </form>
   <div id="resp"></div>
+  </section>
+  <section data-secao="servicos" aria-labelledby="sec-servicos">
+  <h2 id="sec-servicos">Serviços e valores</h2>
+  <div id="lista"></div>
+  </section>
+  <section data-secao="avaliacoes" aria-labelledby="sec-aval">
+  <h2 id="sec-aval">Avaliações de clientes</h2>
+  <div id="avres"></div><div id="aval"></div>
+  <button class="sec oculto" id="avmais" style="width:100%">Ver mais avaliações</button>
+  </section>
+  <section data-secao="acompanhar" aria-labelledby="sec-acomp">
   <h2 id="sec-acomp">Acompanhar pedido</h2>
   <label for="at">Seu WhatsApp</label><input id="at" type="tel" autocomplete="tel" placeholder="(69) 99999-9999">
   <label for="ac">Código do pedido</label><input id="ac" maxlength="8" autocapitalize="characters" placeholder="Ex.: A1B2C3">
   <button class="full" id="acomp">Ver situação</button>
   <div id="ares"></div>
   <div id="avform"></div>
+  </section>
 </section>
 
 <!-- ADMIN -->
@@ -162,15 +170,11 @@ const INSTAGRAM = "";  // opcional: link completo do perfil, ex.: https://instag
 </main>
 <div id="toastped" class="toast oculto" role="alert"></div>
 
-<footer id="rodape">
-  <div class="rp">
+<footer id="rodape" data-secao="contato">
+  <div class="rp" id="sec-contato">
     <div><b id="rpnome"></b><p id="rpcid"></p></div>
-    <div id="sec-contato"><h3>Contato</h3><div id="rpcontato"></div></div>
+    <div><h3>Contato</h3><div id="rpcontato"></div></div>
     <div><h3>Funcionamento</h3><div id="rpfunc">Atendimento com agendamento.</div></div>
-    <div><h3>No site</h3>
-      <button class="lk" data-alvo="sec-pedido">Pedir lavagem</button>
-      <button class="lk" data-alvo="sec-acomp">Acompanhar pedido</button>
-      <button class="lk" data-alvo="sec-aval">Avaliações de clientes</button></div>
   </div>
   <p class="rpfim"><small id="rpcopy"></small></p>
 </footer>
@@ -229,8 +233,8 @@ async function carregarCliente(){
   }
   function ativo(){
     if(menu.classList.contains('oculto')) return;
-    const lim=menu.offsetHeight+24;let a=links[0];
-    for(const l of links){const el=alvo(l);if(el&&el.getBoundingClientRect().top<=lim) a=l;}
+    const lim=menu.offsetHeight+24;let a=links[0],topo=-Infinity;
+    for(const l of links){const el=alvo(l);if(!el) continue;const t=el.getBoundingClientRect().top;if(t<=lim&&t>topo){topo=t;a=l;}}
     if(scrollY>0&&innerHeight+scrollY>=document.documentElement.scrollHeight-4) a=links[links.length-1];
     if(a!==atual){atual=a;marcar(a);}
   }
