@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://*.supabase.co; img-src 'self' data: https://*.supabase.co; base-uri 'none'; form-action 'none'; object-src 'none'">
+<title>Lava-Jato em Costa Marques–RO | Lavagem de veículos</title>
+<meta name="description" content="Lava-Jato em Costa Marques–RO: lavagem de carros e veículos na Avenida Mamoré, com agendamento. Veja os serviços e valores e peça pelo WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<!-- preconnect do Supabase: manter igual ao host de SUPABASE_URL -->
+<link rel="preconnect" href="https://segtkrmpfgrzqzqjwozk.supabase.co" crossorigin>
+<link rel="manifest" id="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0b3a4a">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Lava-Jato">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--agua:#0b3a4a;--espuma:#f3f8f9;--sol:#ffc21a;--tinta:#10252d;--linha:#cfdfe3;--ok:#1f8a4c;--erro:#b3261e}
+*{box-sizing:border-box}
+body{margin:0;font-family:Archivo,system-ui,sans-serif;background:var(--espuma);color:var(--tinta);line-height:1.5}
+header{background:var(--agua);color:#fff;padding:2.5rem 1.25rem 2rem}
+header h1{margin:0;font-size:clamp(2rem,8vw,3.4rem);font-weight:800;letter-spacing:-.02em;line-height:1.05}
+header p{margin:.6rem 0 0;max-width:34ch;opacity:.85}
+main{max-width:640px;margin:0 auto;padding:1.5rem 1.25rem 4rem}
+h2,#avform h3{font-size:1.25rem;margin:2rem 0 .75rem}
+.toast{position:fixed;top:calc(env(safe-area-inset-top,0px) + .6rem);left:.75rem;right:.75rem;max-width:616px;margin:0 auto;background:var(--agua);color:#fff;padding:.9rem 1rem;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);z-index:50}
+.serv{display:flex;justify-content:space-between;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--linha)}
+.serv b{font-weight:600}.preco{font-weight:800;white-space:nowrap}
+.sv{padding:.8rem 0;border-bottom:1px solid var(--linha)}
+.sv-l{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;font-weight:600}
+.sv .preco{font-size:1.1rem}
+.sv small{display:block;margin-top:.15rem}
+#menu{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--linha);box-shadow:0 2px 8px rgba(11,58,74,.08)}
+#menu .mi{max-width:640px;margin:0 auto;display:flex;padding:0 .5rem;overflow-x:auto;scrollbar-width:none}
+#menu .mi::-webkit-scrollbar{display:none}
+#menu a{flex:0 0 auto;display:flex;align-items:center;min-height:48px;padding:0 .85rem;color:var(--tinta);font-size:.92rem;font-weight:600;text-decoration:none;white-space:nowrap;border-bottom:3px solid transparent}
+#menu a:hover{background:var(--espuma);color:var(--agua)}
+#menu a[aria-current="true"]{color:var(--agua);font-weight:800;border-bottom-color:var(--sol)}
+#menu a:focus-visible{outline:3px solid var(--sol);outline-offset:-3px}
+#topo,[id^="sec-"]{scroll-margin-top:4.2rem}
+label{display:block;font-size:.9rem;font-weight:600;margin:.9rem 0 .25rem}
+input,select,textarea{width:100%;font:inherit;padding:.7rem;border:1.5px solid var(--linha);border-radius:6px;background:#fff}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible{outline:3px solid var(--sol);outline-offset:1px}
+button{font:inherit;font-weight:800;border:0;border-radius:6px;padding:.85rem 1.2rem;background:var(--sol);color:var(--tinta);cursor:pointer}
+button.sec{background:#fff;border:1.5px solid var(--linha);font-weight:600;padding:.5rem .8rem}
+.full{width:100%;margin-top:1.2rem}
+.msg{padding:.8rem;border-radius:6px;margin-top:1rem;background:#e3f3ea;color:var(--ok);font-weight:600}
+.msg.erro{background:#fbe7e5;color:var(--erro)}
+.vazio{color:#4d6870;padding:1rem 0}
+.card{background:#fff;border:1px solid var(--linha);border-radius:8px;padding:.9rem;margin-bottom:.7rem}
+.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}.row>*{flex:1 1 120px}
+.tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}.tabs button{flex:1 1 30%;padding:.7rem .2rem;font-size:.85rem;background:#fff;border:1.5px solid var(--linha);font-weight:600}
+.tabs button.on{background:var(--agua);color:#fff;border-color:var(--agua)}
+.chk{display:flex;align-items:center;gap:.4rem;font-weight:400;margin:0}.chk input{width:auto}
+.aviso{background:#fff3cd;color:#5c4400;padding:.8rem 1.25rem;font-weight:600}
+.btnlike{display:inline-block;background:#fff;border:1.5px solid var(--linha);border-radius:6px;padding:.5rem .8rem;font-weight:600;cursor:pointer}
+small{color:#4d6870}
+.oculto{display:none}
+footer{background:var(--agua);color:#fff;padding:2rem 1.25rem 1.5rem}
+.rp{max-width:640px;margin:0 auto;display:grid;gap:1.4rem}
+footer h2,footer h3{margin:0 0 .4rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--sol)}
+footer p{margin:.3rem 0 0;opacity:.85}
+footer a{color:#fff}
+footer .lk{background:none;border:0;padding:.2rem 0;color:#fff;font:inherit;font-weight:400;text-decoration:underline;cursor:pointer;display:block;text-align:left}
+footer small{color:#fff;opacity:.75}
+.rpfim{max-width:640px;margin:1.5rem auto 0;border-top:1px solid rgba(255,255,255,.2);padding-top:1rem}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+#rpcontato a{display:inline-block;padding:.65rem 0}
+@media(min-width:560px){.rp{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<script>
+/* ===== CONFIGURE AQUI ===== */
+const SUPABASE_URL = "https://segtkrmpfgrzqzqjwozk.supabase.co";
+const SUPABASE_KEY = "sb_publishable_GMMsqHbwOW97X44n1rjtvw__EZ8B3Ff";
+const WHATSAPP = "5569992736701"; // 55 + DDD + número do dono
+const NOME = "Lava-Jato";
+const CIDADE = "Costa Marques–RO";
+const ENDERECO = "";   // opcional: Rua, número, bairro (aparece no rodapé com link para o mapa)
+const INSTAGRAM = "";  // opcional: link completo do perfil, ex.: https://instagram.com/seulavajato
+/* ========================== */
+</script>
+
+<div id="aviso" class="aviso oculto" role="alert"></div>
+<div id="recado" class="aviso oculto" role="status"></div>
+<header id="topo" data-secao="inicio"><h1 id="titulo">Lava-Jato</h1><p>Escolha o serviço, o horário e a gente confirma pelo WhatsApp.</p><p>Atendemos na Avenida Mamoré, em <span style="white-space:nowrap">Costa Marques–RO</span>.</p></header>
+<nav id="menu" aria-label="Navegação principal"><div class="mi"><a href="#topo" data-alvo="topo">Início</a><a href="#sec-servicos" data-alvo="sec-servicos">Serviços</a><a href="#sec-aval" data-alvo="sec-aval">Avaliações</a><a href="#sec-pedido" data-alvo="sec-pedido">Pedir lavagem</a><a href="#sec-acomp" data-alvo="sec-acomp">Acompanhar pedido</a><a href="#sec-contato" data-alvo="sec-contato">Contato</a></div></nav>
+<main>
+<!-- CLIENTE -->
+<section id="cliente">
+  <section data-secao="inicio" aria-labelledby="sec-pedido">
+  <h2 id="sec-pedido">Pedir lavagem</h2>
+  <div id="repetir" class="card oculto"></div>
+  <form id="form" onsubmit="return false">
+    <label for="nome">Seu nome</label><input id="nome" required maxlength="80" autocomplete="name">
+    <label for="tel">WhatsApp</label><input id="tel" type="tel" required autocomplete="tel" placeholder="(69) 99999-9999">
+    <label for="vei">Veículo (modelo e placa)</label><input id="vei" required maxlength="80" placeholder="Ex.: Hilux branca ABC-1234">
+    <label for="srv">Serviço</label><select id="srv" required></select><small id="srvdesc" aria-live="polite"></small>
+    <label for="dia">Dia</label><input id="dia" type="date" required>
+    <label for="hor">Horário disponível</label><select id="hor" required><option value="">Escolha o dia primeiro</option></select>
+    <label for="obs">Observações (opcional)</label><textarea id="obs" rows="2" maxlength="300"></textarea>
+    <div id="ltbox" class="oculto"><label class="chk" style="margin-top:1rem"><input type="checkbox" id="lt"> <span id="lttxt"></span></label>
+    <div id="ltend" class="oculto"><label for="end">Endereço para buscar e entregar</label><input id="end" maxlength="200" placeholder="Rua, número, bairro e cidade"></div></div>
+    <input id="site" class="oculto" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="full" id="enviar">Enviar pedido pelo WhatsApp</button>
+    <p><small>Usamos seu nome e telefone só para agendar e confirmar a lavagem.</small></p>
+  </form>
+  <div id="resp"></div>
+  </section>
+  <section data-secao="servicos" aria-labelledby="sec-servicos">
+  <h2 id="sec-servicos">Serviços e valores</h2>
+  <div id="lista"></div>
+  </section>
+  <section data-secao="avaliacoes" aria-labelledby="sec-aval">
+  <h2 id="sec-aval">Avaliações de clientes</h2>
+  <div id="avres"></div><div id="aval"></div>
+  <button class="sec oculto" id="avmais" style="width:100%">Ver mais avaliações</button>
+  </section>
+  <section data-secao="acompanhar" aria-labelledby="sec-acomp">
+  <h2 id="sec-acomp">Acompanhar pedido</h2>
+  <label for="at">Seu WhatsApp</label><input id="at" type="tel" autocomplete="tel" placeholder="(69) 99999-9999">
+  <label for="ac">Código do pedido</label><input id="ac" maxlength="8" autocapitalize="characters" placeholder="Ex.: A1B2C3">
+  <button class="full" id="acomp">Ver situação</button>
+  <div id="ares"></div>
+  <div id="avform"></div>
+  </section>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="oculto">
+  <div id="login">
+    <h2>Entrar no painel</h2>
+    <label for="em">E-mail</label><input id="em" type="email" autocomplete="username">
+    <label for="se">Senha</label><input id="se" type="password" autocomplete="current-password">
+    <button class="full" id="entrar">Entrar</button>
+    <div id="lerr"></div>
+  </div>
+  <div id="painelfn" class="oculto">
+    <div class="row"><h2 style="margin:0">Pedidos</h2><button class="sec" id="sairfn" style="flex:0 0 auto">Sair</button></div>
+    <label for="sfd">Dia</label><input id="sfd" type="date">
+    <div id="sflista"></div>
+  </div>
+  <div id="painel" class="oculto">
+    <div class="row"><h2 style="margin:0">Painel</h2><button class="sec oculto" id="instalarbtn" style="flex:0 0 auto">Instalar app</button><button class="sec" id="alertabtn" style="flex:0 0 auto" aria-pressed="true">🔔 Alerta ligado</button><button class="sec" id="sair" style="flex:0 0 auto">Sair</button></div>
+    <div class="tabs"><button id="t0" class="on">Hoje</button><button id="t1">Pedidos</button><button id="t2">Serviços</button><button id="t3">Clientes</button><button id="t4">Financeiro</button><button id="t5">Negócio</button><button id="t6">Avaliações</button><button id="t7">Backup</button><button id="t8">Fichas</button></div>
+    <div id="v0"></div>
+    <div id="v1" class="oculto"><div id="np"></div>
+      <div id="pf" class="card" role="search" aria-label="Buscar e filtrar pedidos">
+        <input id="pfq" type="search" placeholder="Buscar por nome, placa, telefone ou código" aria-label="Buscar pedidos" autocomplete="off">
+        <div class="row" style="margin-top:.5rem">
+          <div><label for="pfde" style="margin:0 0 .15rem">Data de</label><input id="pfde" type="date"></div>
+          <div><label for="pfate" style="margin:0 0 .15rem">até</label><input id="pfate" type="date"></div>
+        </div>
+        <div class="row" style="margin-top:.5rem">
+          <select id="pfst" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="abertos">Em aberto (não entregues)</option><option>novo</option><option>lavando</option><option>pronto</option><option>entregue</option><option>cancelado</option></select>
+          <select id="pfpg" aria-label="Filtrar por pagamento"><option value="">Pagos e não pagos</option><option value="nao">Ainda não pagaram</option><option value="sim">Já pagaram</option></select>
+        </div>
+        <div class="row" style="margin-top:.5rem"><small id="v1info" aria-live="polite"></small><button id="pflimpar" class="sec" style="flex:0 0 auto">Limpar filtros</button></div>
+      </div>
+      <div id="v1lista"></div><button id="v1mais" class="sec full oculto">Mostrar mais pedidos</button></div>
+    <div id="v2" class="oculto"></div>
+    <div id="v3" class="oculto"></div>
+    <div id="v4" class="oculto"></div>
+    <div id="v5" class="oculto"></div>
+    <div id="v6" class="oculto"></div>
+    <div id="v7" class="oculto"></div>
+    <div id="v8" class="oculto"></div>
+  </div>
+</section>
+</main>
+<div id="toastped" class="toast oculto" role="alert"></div>
+
+<footer id="rodape" data-secao="contato">
+  <div class="rp" id="sec-contato">
+    <div><b id="rpnome"></b><p id="rpcid"></p></div>
+    <div><h2>Contato</h2><div id="rpcontato"></div></div>
+    <div><h3>Funcionamento</h3><div id="rpfunc">Atendimento com agendamento.</div></div>
+  </div>
+  <p class="rpfim"><small id="rpcopy"></small></p>
+</footer>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl=n=>Number(n).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const biblioteca=typeof supabase!=='undefined';
+const CONFIGURADO=biblioteca&&/^https?:\/\/\S+$/.test(SUPABASE_URL)&&!/COLE_/.test(SUPABASE_URL+SUPABASE_KEY)&&SUPABASE_KEY.length>20;
+/* Sem configuração (ou sem a biblioteca), o site não quebra: mostra um aviso e as telas exibem mensagem de erro amigável */
+function semBanco(){
+  const r={data:null,error:{message:'nao_configurado'}};
+  const c=()=>new Proxy(function(){},{get:(t,k)=>k==='then'?(ok)=>ok(r):c(),apply:()=>c()});
+  return {from:c,rpc:c,storage:{from:c},auth:{getSession:async()=>({data:{session:null}}),signInWithPassword:async()=>r,signOut:async()=>({})}};
+}
+const db=CONFIGURADO?supabase.createClient(SUPABASE_URL,SUPABASE_KEY):semBanco();
+if(!CONFIGURADO){
+  $('#aviso').textContent=biblioteca?'Este site ainda não está configurado: preencha SUPABASE_URL e SUPABASE_KEY no topo do arquivo index.html.':'Não foi possível carregar a biblioteca do Supabase. Confira a conexão com a internet e recarregue a página.';
+  $('#aviso').classList.remove('oculto');
+}
+const STATUS=['novo','lavando','pronto','entregue','cancelado'];
+let servicos=[];
+$('#titulo').textContent=NOME;
+
+function rota(){
+  const adm=location.hash==='#admin';
+  $('#cliente').classList.toggle('oculto',adm);
+  $('#admin').classList.toggle('oculto',!adm);
+  $('#rodape').classList.toggle('oculto',adm);
+  $('#manifest').setAttribute('href',adm?'manifest-admin.webmanifest':'manifest.webmanifest');
+  if(adm) iniciarAdmin(); else carregarCliente();
+}
+addEventListener('hashchange',rota);
+
+/* ---------- CLIENTE ---------- */
+async function carregarCliente(){
+  avaliacoes();leva();avisoSite();
+  const {data,error}=await db.from('servicos').select('*').eq('ativo',true).order('nome');
+  if(error){$('#lista').innerHTML='<p class="vazio">Não foi possível carregar os serviços. Tente de novo em instantes.</p>';return;}
+  servicos=data;
+  $('#lista').innerHTML=data.length?data.map(s=>`<div class="sv"><div class="sv-l"><span class="svn">${esc(s.nome)}</span><span class="preco">${brl(s.preco)}</span></div>${s.descricao?`<small>${esc(s.descricao)}</small>`:''}</div>`).join(''):'<p class="vazio">Os serviços ainda não foram cadastrados.</p>';
+  $('#srv').innerHTML=data.map(s=>`<option value="${s.id}">${esc(s.nome)} — ${brl(s.preco)}</option>`).join('');
+  srvDesc();
+  repetirCard();
+}
+/* ---------- MENU DE NAVEGAÇÃO (topo) — não altera location.hash, que o site usa para #admin ---------- */
+(function(){
+  const menu=$('#menu'),links=[...menu.querySelectorAll('a')];
+  const reduz=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const alvo=a=>a.dataset.alvo==='topo'?null:document.getElementById(a.dataset.alvo);
+  let atual=null,travado=false,fixo=null,tFim=0,tMax=0,ocupado=false;
+  function marcar(a){
+    links.forEach(l=>l===a?l.setAttribute('aria-current','true'):l.removeAttribute('aria-current'));
+    const mi=a.parentElement;mi.scrollTo({left:Math.max(0,a.offsetLeft-(mi.clientWidth-a.offsetWidth)/2),behavior:reduz()?'auto':'smooth'});
+  }
+  function ativo(){
+    if(menu.classList.contains('oculto')) return;
+    const lim=menu.offsetHeight+24;let a=links[0],topo=-Infinity;
+    for(const l of links){const el=alvo(l);if(!el) continue;const t=el.getBoundingClientRect().top;if(t<=lim&&t>topo){topo=t;a=l;}}
+    if(scrollY>0&&innerHeight+scrollY>=document.documentElement.scrollHeight-4) a=links[links.length-1];
+    if(a!==atual){atual=a;marcar(a);}
+  }
+  function soltar(){clearTimeout(tFim);clearTimeout(tMax);travado=false;fixo={a:atual,y:scrollY};}
+  addEventListener('scroll',()=>{
+    if(travado){clearTimeout(tFim);tFim=setTimeout(soltar,150);return;}
+    if(fixo&&Math.abs(scrollY-fixo.y)<=2) return;
+    fixo=null;
+    if(ocupado) return;ocupado=true;requestAnimationFrame(()=>{ocupado=false;ativo();});
+  },{passive:true});
+  addEventListener('resize',ativo);
+  menu.addEventListener('click',e=>{
+    const a=e.target.closest('a');if(!a) return;
+    e.preventDefault();
+    const el=alvo(a),b=reduz()?'auto':'smooth';
+    atual=a;marcar(a);travado=true;fixo=null;
+    clearTimeout(tFim);clearTimeout(tMax);tFim=setTimeout(soltar,150);tMax=setTimeout(soltar,1500);
+    if(el) el.scrollIntoView({behavior:b,block:'start'}); else scrollTo({top:0,behavior:b});
+  });
+  const vis=()=>{menu.classList.toggle('oculto',location.hash==='#admin');ativo();};
+  addEventListener('hashchange',vis);vis();
+})();
+function srvDesc(){const s=servicos.find(x=>x.id==$('#srv').value);$('#srvdesc').textContent=s&&s.descricao?s.descricao:'';}
+$('#srv').addEventListener('change',srvDesc);
+let formT0=0;
+$('#form').addEventListener('focusin',()=>{formT0=formT0||Date.now();});
+$('#form').addEventListener('input',()=>{formT0=formT0||Date.now();});
+/* ---------- REPETIR ÚLTIMO PEDIDO (os dados ficam só neste aparelho, nunca no servidor) ---------- */
+const LS_ULT='ultimoPedido';
+function ultimoLer(){
+  try{
+    const o=JSON.parse(localStorage.getItem(LS_ULT)||'null');
+    if(!o||typeof o!=='object') return null;
+    const t=(v,n)=>typeof v==='string'?v.slice(0,n):'';
+    return {nome:t(o.nome,80),telefone:t(o.telefone,30),veiculo:t(o.veiculo,80),servico_id:String(o.servico_id??'').slice(0,40),obs:t(o.obs,300),lt:o.lt===true,end:t(o.end,200)};
+  }catch(e){return null;}
+}
+function ultimoSalvar(o){try{localStorage.setItem(LS_ULT,JSON.stringify(o));}catch(e){}}
+function repetirCard(){
+  const box=$('#repetir'),u=ultimoLer();
+  if(!u||!u.nome||!u.veiculo){box.classList.add('oculto');return;}
+  const s=servicos.find(x=>String(x.id)===u.servico_id);
+  box.innerHTML=`<b>Pedir de novo?</b><br><small>${esc(u.veiculo)}${s?' · '+esc(s.nome)+' — '+brl(s.preco):''}</small>
+    <div class="row" style="margin-top:.5rem"><button class="full" id="repusar">Usar os mesmos dados</button><button class="sec" id="repesq" style="flex:0 0 auto">Esquecer meus dados</button></div>
+    <p style="margin:.5rem 0 0"><small>Guardado só neste aparelho. Você ainda escolhe o dia e o horário.</small></p>`;
+  box.classList.remove('oculto');
+}
+$('#repetir').addEventListener('click',e=>{
+  if(e.target.id==='repesq'){try{localStorage.removeItem(LS_ULT);}catch(x){}$('#repetir').classList.add('oculto');return;}
+  if(e.target.id!=='repusar') return;
+  const u=ultimoLer(); if(!u) return;
+  $('#nome').value=u.nome;$('#tel').value=u.telefone;$('#vei').value=u.veiculo;$('#obs').value=u.obs;
+  const tem=servicos.some(x=>String(x.id)===u.servico_id);
+  if(tem) $('#srv').value=u.servico_id;
+  $('#lt').checked=u.lt&&!$('#ltbox').classList.contains('oculto');
+  $('#lt').dispatchEvent(new Event('change'));
+  if($('#lt').checked) $('#end').value=u.end;
+  $('#srv').dispatchEvent(new Event('change'));
+  formT0=formT0||Date.now();
+  $('#resp').innerHTML=tem?'':'<div class="msg erro">O serviço do seu último pedido não está mais disponível. Escolha outro.</div>';
+  $('#sec-pedido').scrollIntoView({behavior:'smooth'});
+  setTimeout(()=>$('#dia').focus(),400);
+});
+
+$('#enviar').onclick=async()=>{
+  const f=$('#form'); if($('#site').value) return; if(!f.reportValidity()) return;
+  if(!formT0||Date.now()-formT0<3000){$('#resp').innerHTML='<div class="msg erro">Aguarde um instante e envie de novo.</div>';return;}
+  const s=servicos.find(x=>x.id==$('#srv').value); if(!s) return;
+  const p={nome:$('#nome').value.trim(),telefone:$('#tel').value.trim(),veiculo:$('#vei').value.trim(),
+    servico_id:s.id,servico_nome:s.nome,preco:s.preco,data_hora:$('#hor').value,obs:$('#obs').value.trim()};
+  $('#enviar').disabled=true;
+  const {data:r,error}=await db.rpc('criar_pedido',{p_nome:p.nome,p_telefone:p.telefone,p_veiculo:p.veiculo,p_servico_id:s.id,p_data_hora:p.data_hora,p_obs:p.obs,p_leva_traz:$('#lt').checked,p_endereco:$('#end').value.trim()||null});
+  $('#enviar').disabled=false;
+  if(error||!r||!r[0]){const muito=error&&String(error.message).includes('muitos_pedidos'),lim=error&&String(error.message).includes('limite_pedidos_abertos'),blq=error&&String(error.message).includes('contato_bloqueado');const ind=error&&String(error.message).includes('horario_indisponivel');if(ind)slots();$('#resp').innerHTML='<div class="msg erro">'+(ind?'Esse horário acabou de ser preenchido. Escolha outro.':muito?'Muitos pedidos em pouco tempo. Tente mais tarde ou chame direto no WhatsApp.':lim?'Você já tem pedidos em aberto. Para marcar mais, chame direto no WhatsApp.':blq?'Não foi possível fazer o pedido por aqui. Chame direto no WhatsApp.':'Não foi possível enviar o pedido. Confira os dados e tente de novo.')+'</div>';return;}
+  p.servico_nome=r[0].o_servico;p.preco=r[0].o_preco;p.codigo=r[0].o_codigo;p.taxa=Number(r[0].o_taxa)||0;const lt=$('#lt').checked,ender=$('#end').value.trim();
+  const quando=new Date(p.data_hora).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+  const txt=`Olá! Quero agendar: ${p.servico_nome} (${brl(p.preco)})${lt?(p.taxa>0?` + leva e traz ${brl(p.taxa)}`:' + leva e traz (sem taxa)'):''}\nVeículo: ${p.veiculo}\nQuando: ${quando}\nNome: ${p.nome}\nCódigo: ${p.codigo}${lt?'\nLeva e traz, endereço: '+ender:''}${p.obs?'\nObs: '+p.obs:''}`;
+  $('#resp').innerHTML='<div class="msg">Pedido enviado! Guarde seu código para acompanhar: <b>'+esc(p.codigo)+'</b>. Abrindo o WhatsApp para confirmar.</div>';
+  ultimoSalvar({nome:p.nome,telefone:p.telefone,veiculo:p.veiculo,servico_id:s.id,obs:p.obs,lt,end:ender});repetirCard();
+  formT0=0;f.reset();$('#ltend').classList.add('oculto');$('#end').required=false;$('#hor').innerHTML='<option value="">Escolha o dia primeiro</option>';
+  open('https://wa.me/'+numPedido()+'?text='+encodeURIComponent(txt),'_blank');
+};
+
+const NOMES_DIAS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+function diasTxt(d){
+  const a=[...d].sort((x,y)=>x-y); if(!a.length) return 'Atendimento';
+  const seguidos=a.every((v,i)=>i===0||v===a[i-1]+1);
+  return seguidos&&a.length>2?NOMES_DIAS[a[0]]+' a '+NOMES_DIAS[a[a.length-1]]:a.map(v=>NOMES_DIAS[v]).join(', ');
+}
+function fmtH(t){const [hh,mm]=String(t).split(':');return mm==='00'?hh+'h':hh+'h'+mm;}
+let CONTATOS=[],INFO={endereco:ENDERECO,instagram:INSTAGRAM};
+const soDig=s=>String(s||'').replace(/\D/g,'');
+function normTel(s){let d=soDig(s);if(d.length===10||d.length===11)d='55'+d;return /^55\d{10,11}$/.test(d)?d:null;}
+function fmtTel(d){const n=soDig(d).replace(/^55/,'');return n.length===11?`(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`:n.length===10?`(${n.slice(0,2)}) ${n.slice(2,6)}-${n.slice(6)}`:n;}
+function numPedido(){return (CONTATOS.find(x=>x.o_whatsapp)||{}).o_telefone||normTel(WHATSAPP)||soDig(WHATSAPP);}
+function rodape(){
+  $('#rpnome').textContent=NOME;
+  $('#rpcid').textContent='Lavagem de veículos em '+CIDADE+' e região.';
+  const lista=CONTATOS.length?CONTATOS:[{o_rotulo:'WhatsApp',o_telefone:normTel(WHATSAPP)||soDig(WHATSAPP),o_whatsapp:true}];
+  let c=lista.map(x=>{
+    const d=soDig(x.o_telefone);
+    return esc(x.o_rotulo)+': '+(x.o_whatsapp?`<a href="https://wa.me/${esc(d)}" target="_blank" rel="noopener">${esc(fmtTel(d))}</a>`:`<a href="tel:+${esc(d)}">${esc(fmtTel(d))}</a>`);
+  }).join('<br>');
+  if(INFO.endereco) c+=`<br>${esc(INFO.endereco)} · <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(INFO.endereco)}" target="_blank" rel="noopener">Ver no mapa<span class="sr"> do ${esc(NOME)} (abre em nova aba)</span></a>`;
+  if(/^https:\/\//.test(INFO.instagram)) c+=`<br><a href="${esc(INFO.instagram)}" target="_blank" rel="noopener">Instagram</a>`;
+  $('#rpcontato').innerHTML=c;
+  $('#rpcopy').textContent='© '+new Date().getFullYear()+' '+NOME+'. Seu nome e telefone são usados só para agendar e confirmar a lavagem.';
+}
+$('#rodape').addEventListener('click',e=>{
+  const b=e.target.closest('.lk'); if(!b) return;
+  const el=document.getElementById(b.dataset.alvo);
+  if(el) el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
+});
+
+async function leva(){
+  const {data}=await db.rpc('config_publica');
+  const {data:ct}=await db.rpc('contatos_publicos'); CONTATOS=ct||[];
+  const c=data&&data[0],on=!!(c&&c.o_leva_traz);
+  INFO.endereco=(c&&c.o_endereco)||ENDERECO; INFO.instagram=(c&&c.o_instagram)||INSTAGRAM; rodape();
+  if(c&&c.o_abre&&c.o_dias) $('#rpfunc').textContent=diasTxt(c.o_dias)+', das '+fmtH(c.o_abre)+' às '+fmtH(c.o_fecha)+' (com agendamento)';
+  $('#ltbox').classList.toggle('oculto',!on);
+  if(on) $('#lttxt').textContent='Quero que busquem e entreguem meu veículo'+(Number(c.o_taxa)>0?' (+ '+brl(c.o_taxa)+')':' (sem taxa)');
+}
+$('#lt').addEventListener('change',()=>{$('#ltend').classList.toggle('oculto',!$('#lt').checked);$('#end').required=$('#lt').checked;});
+
+let avOff=0;
+async function avaliacoes(mais){
+  if(!mais){
+    avOff=0;$('#aval').innerHTML='';
+    const {data:s}=await db.rpc('resumo_avaliacoes');
+    $('#avres').innerHTML=s&&s[0]&&s[0].o_total>0?`<p><b style="font-size:1.4rem">${Number(s[0].o_media).toFixed(1).replace('.',',')} <span aria-hidden="true">★</span><span class="sr">de 5 estrelas</span></b> <small>${s[0].o_total} ${s[0].o_total>1?'avaliações':'avaliação'}</small></p>`:'<p class="vazio">Ainda não há avaliações. Seja o primeiro depois da sua lavagem!</p>';
+  }
+  const {data,error}=await db.rpc('avaliacoes_publicas',{p_limite:6,p_offset:avOff});
+  if(error||!data) return;
+  $('#aval').insertAdjacentHTML('beforeend',data.map(a=>`<div class="card"><div><span aria-hidden="true">${'★'.repeat(a.o_nota)}<span style="opacity:.25">${'★'.repeat(5-a.o_nota)}</span></span><span class="sr">Nota ${a.o_nota} de 5 estrelas</span></div><small>${esc(a.o_nome)} · ${esc(a.o_servico)} · ${new Date(a.o_data).toLocaleDateString('pt-BR')}</small>${a.o_comentario?`<p style="margin:.4rem 0 0">${esc(a.o_comentario)}</p>`:''}${(a.o_fotos&&a.o_fotos.length)?`<div class="row" style="margin-top:.5rem">${a.o_fotos.map((u,i,f)=>`<img src="${esc(u)}" alt="Foto${f.length>1?` ${i+1} de ${f.length}`:''} enviada por ${a.o_nome?esc(a.o_nome):'cliente'}${a.o_servico?` na avaliação de ${esc(a.o_servico)}`:''}" loading="lazy" style="flex:0 0 96px;width:96px;height:96px;object-fit:cover;border-radius:6px">`).join('')}</div>`:''}</div>`).join(''));
+  avOff+=data.length;$('#avmais').classList.toggle('oculto',data.length<6);
+}
+$('#avmais').onclick=()=>avaliacoes(true);
+
+function formAval(){
+  return `<h3>Avalie este serviço</h3>
+  <label for="an">Nota</label><select id="an"><option value="5">5 ★ Excelente</option><option value="4">4 ★ Muito bom</option><option value="3">3 ★ Bom</option><option value="2">2 ★ Ruim</option><option value="1">1 ★ Muito ruim</option></select>
+  <label for="acm">Comentário (opcional)</label><textarea id="acm" rows="3" maxlength="500"></textarea>
+  <label>Fotos (até 3)</label><label><span class="btnlike">+ Adicionar fotos</span><input id="afo" type="file" accept="image/*" multiple class="oculto"></label> <small id="afn"></small>
+  <p><small>Seu primeiro nome, a nota, o comentário e as fotos aparecem no site depois que o lava-jato aprovar. Evite fotos com pessoas ou com a placa visível.</small></p>
+  <button class="full" id="aenviar">Enviar avaliação</button><div id="aresp"></div>`;
+}
+async function fotoParaTexto(file){
+  const bmp=await createImageBitmap(file,{imageOrientation:'from-image'});
+  const f=Math.min(1,640/Math.max(bmp.width,bmp.height));
+  const cv=document.createElement('canvas');cv.width=Math.round(bmp.width*f);cv.height=Math.round(bmp.height*f);
+  cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height);
+  for(const q of [.7,.55,.4]){const u=cv.toDataURL('image/jpeg',q);if(u.length<=150000) return u;}
+  throw new Error('foto_grande');
+}
+$('#avform').addEventListener('change',e=>{
+  if(e.target.id!=='afo') return;
+  const n=Math.min(e.target.files.length,3);
+  $('#afn').textContent=n?n+(n>1?' fotos selecionadas':' foto selecionada')+(e.target.files.length>3?' (só as 3 primeiras serão enviadas)':''):'';
+});
+$('#avform').addEventListener('click',async e=>{
+  if(e.target.id!=='aenviar') return;
+  const btn=e.target; btn.disabled=true; $('#aresp').innerHTML='';
+  try{
+    const fotos=[];
+    for(const f of [...$('#afo').files].slice(0,3)) fotos.push(await fotoParaTexto(f));
+    const {error}=await db.rpc('enviar_avaliacao',{p_telefone:$('#at').value.trim(),p_codigo:$('#ac').value.trim(),p_nota:Number($('#an').value),p_comentario:$('#acm').value.trim(),p_fotos:fotos});
+    if(error) throw error;
+    $('#avform').innerHTML='<div class="msg">Obrigado pela avaliação! Ela aparece no site depois que o lava-jato aprovar.</div>';
+  }catch(err){
+    const m=String((err&&err.message)||'');btn.disabled=false;
+    $('#aresp').innerHTML='<div class="msg erro">'+(m.includes('ja_avaliado')?'Este pedido já foi avaliado.':m.includes('pedido_nao_concluido')?'Você poderá avaliar quando o serviço estiver pronto.':m.includes('muitas_tentativas')?'Muitas tentativas. Aguarde alguns minutos e tente de novo.':'Não foi possível enviar a avaliação. Confira os dados e tente de novo.')+'</div>';
+  }
+});
+
+$('#dia').min=new Date().toLocaleDateString('en-CA',{timeZone:'America/Porto_Velho'});
+$('#dia').addEventListener('change',slots);
+async function slots(){
+  const d=$('#dia').value,sel=$('#hor');
+  if(!d){sel.innerHTML='<option value="">Escolha o dia primeiro</option>';return;}
+  const {data,error}=await db.rpc('horarios_disponiveis',{p_dia:d});
+  if(error||!data||!data.length){sel.innerHTML='<option value="">'+(error?'Não foi possível carregar os horários':'Sem horários livres neste dia')+'</option>';return;}
+  sel.innerHTML=data.map(x=>`<option value="${esc(x.o_hora)}">${new Date(x.o_hora).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'})} · ${x.o_vagas} ${x.o_vagas>1?'vagas':'vaga'}</option>`).join('');
+}
+
+$('#acomp').onclick=async()=>{
+  const tel=$('#at').value.trim(),cod=$('#ac').value.trim(); if(!tel||!cod) return;
+  const btnAc=$('#acomp'); if(btnAc.disabled) return; btnAc.disabled=true;
+  const {data,error}=await db.rpc('acompanhar_pedido',{p_telefone:tel,p_codigo:cod});
+  setTimeout(()=>{btnAc.disabled=false;},1500);
+  if(error&&String(error.message).includes('muitas_tentativas')){$('#avform').innerHTML='';$('#ares').innerHTML='<div class="msg erro">Muitas tentativas. Aguarde alguns minutos e tente de novo.</div>';return;}
+  if(error||!data||!data[0]){$('#avform').innerHTML='';$('#ares').innerHTML='<div class="msg erro">Pedido não encontrado. Confira o WhatsApp e o código.</div>';return;}
+  const r=data[0],ROT={novo:'Recebido, aguardando confirmação',lavando:'Seu veículo está sendo lavado',pronto:'Pronto! Pode retirar ou aguardar a entrega',entregue:'Entregue',cancelado:'Cancelado'};
+  $('#ares').innerHTML=`<div class="card"><b>${esc(r.o_servico)}</b><br>${esc(r.o_veiculo)}<br><small>${new Date(r.o_data).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}</small><div class="msg" style="margin-top:.6rem">${esc(ROT[r.o_status]||r.o_status)}</div></div>`;
+  $('#avform').innerHTML=['pronto','entregue'].includes(r.o_status)?formAval():'';
+};
+
+/* ---------- ADMIN ---------- */
+async function iniciarAdmin(){
+  const {data:{session}}=await db.auth.getSession();
+  clearInterval(pedTimer);pedVisto=null;$('#toastped').classList.add('oculto');
+  $('#login').classList.toggle('oculto',!!session);
+  $('#painel').classList.add('oculto');$('#painelfn').classList.add('oculto');
+  if(!session) return;
+  const {data:papel,error}=await db.rpc('meu_papel');
+  if(!error&&!papel){
+    await db.auth.signOut();
+    $('#login').classList.remove('oculto');
+    $('#lerr').innerHTML='<div class="msg erro">Esta conta não tem acesso ao painel.</div>';
+    return;
+  }
+  if(!error&&papel==='funcionario'){$('#painelfn').classList.remove('oculto');staffIniciar();return;}
+  $('#painel').classList.remove('oculto');
+  npFechar();telaHoje();pedidos();listaServicos();
+  alertaIniciar();
+}
+$('#entrar').onclick=async()=>{
+  const {error}=await db.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#se').value});
+  if(error){$('#lerr').innerHTML='<div class="msg erro">E-mail ou senha incorretos.</div>';return;}
+  iniciarAdmin();
+};
+$('#sair').onclick=async()=>{await db.auth.signOut();iniciarAdmin();};
+[0,1,2,3,4,5,6,7,8].forEach(i=>$('#t'+i).onclick=()=>aba(i));
+function aba(n){
+  [0,1,2,3,4,5,6,7,8].forEach(i=>{$('#v'+i).classList.toggle('oculto',i!==n);$('#t'+i).classList.toggle('on',i===n);});
+  if(n===0)telaHoje(); if(n===1)pedidos(); if(n===3)clientes(); if(n===4)faturamento(); if(n===5)horarios(); if(n===6)avalAdmin(); if(n===7)backupTab(); if(n===8)fichas();
+}
+
+/* ---------- LEVA E TRAZ (CONFIG) ---------- */
+async function ltAdmin(){
+  const {data:c,error}=await db.from('config').select('leva_traz_ativo,taxa_leva_traz,fidelidade_a_cada,fidelidade_pct').eq('id',1).single();
+  if(error||!c){$('#ltcfg').innerHTML='<p class="vazio">Erro ao carregar o leva e traz. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  $('#ltcfg').innerHTML=`<h2>Leva e traz</h2><div class="card"><label class="chk"><input type="checkbox" id="lta" ${c.leva_traz_ativo?'checked':''}> Oferecer leva e traz aos clientes</label>
+    <label for="ltt">Taxa (R$)</label><input id="ltt" type="number" step="0.01" min="0" max="1000" value="${c.taxa_leva_traz}">
+    <button class="full" id="ltsalvar">Salvar leva e traz</button></div><small>A taxa é somada ao valor do serviço em cada pedido e entra no faturamento.</small>
+    <h2>Fidelidade</h2><div class="card"><label for="fda">A cada quantas lavagens pagas o cliente ganha desconto (0 = desligado)</label><input id="fda" type="number" min="0" max="100" step="1" value="${c.fidelidade_a_cada}">
+    <label for="fdp">Desconto de fidelidade (%)</label><input id="fdp" type="number" min="1" max="100" step="1" value="${c.fidelidade_pct}">
+    <button class="full" id="fdsalvar">Salvar fidelidade</button></div>
+    <small>O sistema conta as lavagens marcadas como "entregue" pelo WhatsApp do cliente e avisa no pedido quando ele tem desconto disponível. Quem aplica é o dono, com um toque.</small>`;
+}
+$('#v2').addEventListener('click',async e=>{
+  if(e.target.id!=='ltsalvar') return;
+  const taxa=Number($('#ltt').value);
+  if(!(taxa>=0&&taxa<=1000)){alert('Informe uma taxa entre 0 e 1000.');return;}
+  const {error}=await db.from('config').update({leva_traz_ativo:$('#lta').checked,taxa_leva_traz:taxa}).eq('id',1);
+  e.target.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>e.target.textContent='Salvar leva e traz',1800);
+});
+
+$('#v2').addEventListener('click',async e=>{
+  if(e.target.id!=='fdsalvar') return;
+  const n=Number($('#fda').value),pct=Number($('#fdp').value);
+  if(!(Number.isInteger(n)&&n>=0&&n<=100&&Number.isInteger(pct)&&pct>=1&&pct<=100)){alert('Use números inteiros: lavagens de 0 a 100 e desconto de 1 a 100%.');return;}
+  const {error}=await db.from('config').update({fidelidade_a_cada:n,fidelidade_pct:pct}).eq('id',1);
+  e.target.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>e.target.textContent='Salvar fidelidade',1800);
+});
+
+/* ---------- FIDELIDADE E DESCONTOS ---------- */
+let fdMap={},fdCfg={fidelidade_a_cada:0,fidelidade_pct:100};
+function fdInfo(p){
+  const n=Number(fdCfg.fidelidade_a_cada)||0; if(!n||p.cliente_id) return null;
+  const x=fdMap[String(p.telefone||'').replace(/\D/g,'').slice(-8)],pagas=x?x.o_pagas:0,res=x?x.o_resgates:0;
+  return {n,pagas,disp:Math.floor(pagas/n)-res};
+}
+function fdBloco(p){
+  const i=fdInfo(p),pct=Number(fdCfg.fidelidade_pct)||100;
+  let t='';
+  if(i&&p.status!=='cancelado'&&!p.resgate){
+    t+=i.disp>0?`<div class="msg" style="font-weight:600">⭐ Cliente fiel: ${i.pagas} lavagens pagas. Tem desconto de fidelidade disponível (${pct}%). <button class="fdap" style="margin-top:.4rem">Aplicar no pedido</button></div>`:`<small>Fidelidade: ${i.pagas%i.n} de ${i.n} lavagens para o próximo desconto.</small>`;
+  }
+  if(p.resgate) t+='<small>Desconto de fidelidade aplicado neste pedido.</small>';
+  t+=`<div class="row" style="margin-top:.4rem"><input class="dval" type="number" min="0" step="0.01" placeholder="Desconto (R$)" value="${p.desconto>0?esc(p.desconto):''}" aria-label="Desconto em reais" style="max-width:150px"><button class="sec dap">Aplicar desconto</button>${p.desconto>0?'<button class="sec drm">Remover</button>':''}</div>`;
+  return t;
+}
+
+/* ---------- TELA HOJE ---------- */
+let hojePed=[],hojeNudge=new Set();
+const totalPed=p=>Number(p.preco||0)+Number(p.taxa||0)-Number(p.desconto||0);
+function avisarWpp(p,st){
+  let d=String(p.telefone||'').replace(/\D/g,'');
+  if(d.length<10){alert('Este pedido não tem um WhatsApp válido.');return;}
+  if(d.length<=11) d='55'+d;
+  open('https://wa.me/'+d+'?text='+encodeURIComponent(msgWpp(p,st)),'_blank','noopener');
+}
+function cartaoHoje(p,comData){
+  const quando=new Date(p.data_hora).toLocaleString('pt-BR',comData?{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'}:{hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'});
+  return `<div class="card" data-id="${p.id}"><b>${esc(quando)}</b> · ${esc(p.nome)}${p.leva_traz?' · 🚗 leva e traz':''}<br>${esc(p.veiculo)} <small>· ${esc(p.servico_nome)} · ${brl(totalPed(p))}</small>
+    <div class="row" style="margin-top:.5rem"><select class="st" aria-label="Situação">${STATUS.map(s=>`<option ${s===p.status?'selected':''}>${s}</option>`).join('')}</select><label class="chk"><input type="checkbox" class="pg" ${p.pago?'checked':''}> Pago</label><button class="${hojeNudge.has(p.id)?'':'sec '}wpp">Avisar cliente</button>${['entregue','cancelado'].includes(p.status)?'':'<button class="sec rem">Remarcar</button>'}<button class="sec vist">${vistRotulo(p)}</button>${selFunc(p)}<div class="rpanel oculto" style="flex:1 1 100%"></div><div class="vpanel oculto" style="flex:1 1 100%"></div></div></div>`;
+}
+async function telaHoje(){
+  const dia=hojeBR(),ini=new Date(dia+'T00:00:00-04:00'),fim=new Date(ini.getTime()+864e5);
+  const [a,b]=await Promise.all([
+    db.from('pedidos').select('*').gte('data_hora',ini.toISOString()).lt('data_hora',fim.toISOString()).neq('status','cancelado').order('data_hora'),
+    db.from('pedidos').select('*').lt('data_hora',ini.toISOString()).in('status',['novo','lavando','pronto']).order('data_hora').limit(30),carregaFunc()]);
+  if(a.error||b.error){$('#v0').innerHTML='<p class="vazio">Erro ao carregar o resumo de hoje.</p>';return;}
+  hojePed=[...a.data,...b.data];
+  const n=s=>a.data.filter(x=>x.status===s).length;
+  let tot=0,rec=0; a.data.forEach(x=>{const v=totalPed(x);tot+=v;if(x.pago)rec+=v;});
+  const dt=new Date(dia+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'});
+  const cont=(r,v)=>`<div class="card" style="flex:1 1 70px;text-align:center;margin:0"><div class="preco" style="font-size:1.6rem">${v}</div><small>${r}</small></div>`;
+  $('#v0').innerHTML=`<div class="row"><b style="flex:1 1 auto;text-transform:capitalize">${esc(dt)}</b><button class="sec" id="hatual" style="flex:0 0 auto">Atualizar</button><button id="hnovo" style="flex:0 0 auto">+ Novo pedido</button></div>
+    <div class="row" style="margin:.8rem 0">${cont('Aguardando',n('novo'))}${cont('Lavando',n('lavando'))}${cont('Prontos',n('pronto'))}${cont('Entregues',n('entregue'))}</div>
+    <div class="card"><small>Faturado hoje</small><div class="preco" style="font-size:1.6rem">${brl(tot)}</div><div class="row" style="margin-top:.4rem"><div><small>Recebido</small><br><b>${brl(rec)}</b></div><div><small>A receber</small><br><b${tot-rec>0?' style="color:var(--erro)"':''}>${brl(tot-rec)}</b></div></div></div>`+
+    (b.data.length?`<h2>⚠ De dias anteriores, ainda não entregues (${b.data.length})</h2>`+b.data.map(p=>cartaoHoje(p,true)).join(''):'')+
+    `<h2>Pedidos de hoje (${a.data.length})</h2>`+(a.data.length?a.data.map(p=>cartaoHoje(p,false)).join(''):'<p class="vazio">Nenhum pedido para hoje. Toque em + Novo pedido para registrar um cliente que chegou.</p>');
+}
+$('#v0').addEventListener('click',e=>{
+  const t=e.target;
+  if(t.id==='hatual') telaHoje();
+  if(t.id==='hnovo'){aba(1);npAbrir();}
+  if(t.classList.contains('wpp')){
+    const card=t.closest('.card'),p=hojePed.find(x=>x.id==card.dataset.id);
+    if(p) avisarWpp(p,card.querySelector('.st').value);
+  }
+});
+$('#v0').addEventListener('change',async e=>{
+  const c=e.target.closest('.card'); if(!c||!(e.target.classList.contains('st')||e.target.classList.contains('pg'))) return;
+  const {error}=await db.from('pedidos').update({status:c.querySelector('.st').value,pago:c.querySelector('.pg').checked}).eq('id',c.dataset.id);
+  if(error){alert('Não foi possível salvar. Tente de novo.');return;}
+  if(e.target.classList.contains('st')) hojeNudge.add(Number(c.dataset.id));
+  telaHoje();
+});
+
+/* ---------- APLICATIVO NO CELULAR E ALERTA DE PEDIDO NOVO ---------- */
+if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+let pedVisto=null,pedTimer=null,audioCtx=null,instalarEv=null,tituloOrig=document.title,pedNovos=0;
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();instalarEv=e;$('#instalarbtn').classList.remove('oculto');});
+addEventListener('appinstalled',()=>{instalarEv=null;$('#instalarbtn').classList.add('oculto');});
+$('#instalarbtn').onclick=async()=>{if(!instalarEv) return;instalarEv.prompt();await instalarEv.userChoice.catch(()=>{});instalarEv=null;$('#instalarbtn').classList.add('oculto');};
+const alertaOn=()=>{try{return localStorage.getItem('alertaPedidos')!=='0';}catch(e){return true;}};
+function alertaRotulo(){const on=alertaOn(),b=$('#alertabtn');b.textContent=on?'🔔 Alerta ligado':'🔕 Alerta desligado';b.setAttribute('aria-pressed',on?'true':'false');}
+function audioLiberar(){try{audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();}catch(e){}}
+addEventListener('pointerdown',audioLiberar,{once:true});
+$('#alertabtn').onclick=()=>{
+  const novo=!alertaOn();
+  try{localStorage.setItem('alertaPedidos',novo?'1':'0');}catch(e){}
+  alertaRotulo();
+  if(novo){audioLiberar();bipe(true);if('Notification' in window&&Notification.permission==='default')Notification.requestPermission().catch(()=>{});}
+};
+function bipe(forcar){
+  if(!forcar&&!alertaOn()) return;
+  try{
+    audioLiberar();
+    [[0,880],[.24,1175]].forEach(([d,f])=>{
+      const t=audioCtx.currentTime+d,o=audioCtx.createOscillator(),g=audioCtx.createGain();
+      o.type='sine';o.frequency.value=f;
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.35,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+.22);
+      o.connect(g);g.connect(audioCtx.destination);o.start(t);o.stop(t+.24);
+    });
+  }catch(e){}
+  try{navigator.vibrate&&navigator.vibrate([200,100,200]);}catch(e){}
+}
+async function pedMarcaVisto(){
+  const {data}=await db.from('pedidos').select('id').order('id',{ascending:false}).limit(1);
+  pedVisto=data&&data[0]?data[0].id:0;
+}
+async function alertaIniciar(){
+  alertaRotulo();
+  clearInterval(pedTimer);
+  await pedMarcaVisto();
+  pedTimer=setInterval(pedConfere,30000);
+}
+async function pedConfere(){
+  if(pedVisto===null||location.hash!=='#admin'||!alertaOn()) return;
+  const {data,error}=await db.from('pedidos').select('id,nome,servico_nome,data_hora').is('cliente_id',null).gt('id',pedVisto).order('id');
+  if(error||!data||!data.length) return;
+  pedVisto=data[data.length-1].id;
+  alertaPedido(data);
+}
+function alertaPedido(l){
+  bipe();
+  const u=l[l.length-1],n=l.length;pedNovos+=n;
+  const quando=new Date(u.data_hora).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'});
+  const txt=esc(u.nome)+' · '+esc(u.servico_nome||'')+' · '+quando;
+  $('#toastped').innerHTML=`<b>${pedNovos===1?'Novo pedido':pedNovos+' novos pedidos'}</b><br><small>${txt}</small><div class="row" style="margin-top:.6rem"><button class="tpver">Ver pedidos</button><button class="sec tpx">Fechar</button></div>`;
+  $('#toastped').classList.remove('oculto');
+  document.title='('+pedNovos+') Novo pedido';
+  if(document.hidden&&'Notification' in window&&Notification.permission==='granted'&&navigator.serviceWorker)
+    navigator.serviceWorker.ready.then(r=>r.showNotification(pedNovos===1?'Novo pedido':pedNovos+' novos pedidos',{body:u.nome+' · '+(u.servico_nome||'')+' · '+quando,icon:'icon-192.png',tag:'pedido-novo'})).catch(()=>{});
+}
+function alertaFechar(){pedNovos=0;document.title=tituloOrig;$('#toastped').classList.add('oculto');}
+$('#toastped').addEventListener('click',e=>{
+  if(e.target.classList.contains('tpver')){alertaFechar();aba(0);window.scrollTo({top:0,behavior:'smooth'});}
+  else if(e.target.classList.contains('tpx')) alertaFechar();
+});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){pedConfere();}});
+
+/* ---------- HISTÓRICO DE ALTERAÇÕES ---------- */
+const H_ROT={status:'Situação',pago:'Pagamento',preco:'Preço',taxa:'Taxa de leva e traz',desconto:'Desconto',horario:'Horário',servico:'Serviço',funcionario:'Quem lavou'};
+function histTxt(h){
+  if(h.campo==='criado') return 'Pedido criado';
+  const f=v=>v===null||v===undefined||v===''?'—':(['preco','taxa','desconto'].includes(h.campo)?brl(Number(v)):esc(v));
+  return (H_ROT[h.campo]||esc(h.campo))+': '+f(h.de)+' → '+f(h.para);
+}
+async function histPainel(card){
+  const box=card.querySelector('.hpanel');
+  box.innerHTML='<small>Carregando...</small>';
+  const {data,error}=await db.from('pedidos_historico').select('*').eq('pedido_id',card.dataset.id).order('quando',{ascending:false}).order('id',{ascending:false}).limit(100);
+  if(error){box.innerHTML='<small>Erro ao carregar o histórico. Confira se o arquivo supabase.sql foi executado.</small>';return;}
+  box.innerHTML='<div style="border-top:1px solid var(--linha);padding-top:.6rem"><b>Histórico de alterações</b>'+(data.length?data.map(h=>`<div class="serv"><span>${histTxt(h)}<br><small>${new Date(h.quando).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'})} · ${esc(h.usuario||'')}</small></span></div>`).join(''):'<p style="margin:.6rem 0 0"><small>Nenhuma alteração registrada. O histórico começa a valer a partir de quando o arquivo supabase.sql foi atualizado.</small></p>')+'</div>';
+}
+$('#v1').addEventListener('click',e=>{
+  if(!e.target.classList.contains('hist')) return;
+  const card=e.target.closest('.card'),b=card.querySelector('.hpanel');
+  b.classList.toggle('oculto');
+  if(!b.classList.contains('oculto')) histPainel(card);
+});
+
+/* ---------- VISTORIA NA ENTRADA ---------- */
+const V_AREAS=['Frente','Traseira','Lateral esquerda','Lateral direita','Capô','Teto','Vidros','Rodas e calotas','Interior','Outro'];
+const vistRotulo=p=>p.vistoria_em?'Vistoria ✓':'Vistoria';
+async function vistPainel(card,achar){
+  const id=card.dataset.id,box=card.querySelector('.vpanel'),p=achar(id);
+  const {data,error}=await db.from('vistoria_avarias').select('*').eq('pedido_id',id).order('criado_em');
+  if(error){box.innerHTML='<small>Erro ao carregar a vistoria. Confira se o arquivo supabase.sql foi executado.</small>';return;}
+  const urls={},cams=data.filter(x=>x.caminho).map(x=>x.caminho);
+  if(cams.length){const {data:sg}=await db.storage.from('fotos').createSignedUrls(cams,3600);(sg||[]).forEach(x=>{if(x.signedUrl)urls[x.path]=x.signedUrl;});}
+  card._vist=data;
+  const feita=p&&p.vistoria_em?new Date(p.vistoria_em).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'}):'';
+  box.innerHTML=`<div style="border-top:1px solid var(--linha);padding-top:.6rem"><b>Vistoria na entrada</b><br><small>Anote riscos, amassados ou peças soltas que o veículo já tinha ao chegar.</small>
+    ${data.length?data.map(x=>`<div class="serv"><span><b>${esc(x.area)}</b> · ${esc(x.descricao)}${x.caminho&&urls[x.caminho]?`<br><a href="${esc(urls[x.caminho])}" target="_blank" rel="noopener"><img src="${esc(urls[x.caminho])}" alt="Foto da avaria: ${esc(x.area)}" style="width:96px;height:96px;object-fit:cover;border-radius:6px;margin-top:.3rem"></a>`:''}</span><button class="sec vrm" data-id="${x.id}" data-c="${esc(x.caminho||'')}">Excluir</button></div>`).join(''):'<p style="margin:.6rem 0"><small>Nenhuma avaria registrada.</small></p>'}
+    <label style="margin:.6rem 0 .15rem">Onde fica a avaria?</label><select class="varea">${V_AREAS.map(a=>`<option>${a}</option>`).join('')}</select>
+    <label style="margin:.5rem 0 .15rem">Descrição</label><input class="vdesc" maxlength="200" placeholder="Ex.: Risco de 10 cm na porta">
+    <label style="margin:.5rem 0 .15rem">Foto (opcional)</label><input type="file" accept="image/*" class="vfoto">
+    <div class="row" style="margin-top:.6rem"><button class="sec vadd">Adicionar avaria</button></div>
+    <div style="margin-top:.8rem;border-top:1px solid var(--linha);padding-top:.6rem">
+    ${feita?`<small>Vistoria concluída em ${feita} · ${data.length?data.length+(data.length===1?' avaria registrada':' avarias registradas'):'sem avarias'}.</small>`:`<small>Quando terminar de conferir o veículo, conclua a vistoria${data.length?'':' (sem avarias)'}.</small>`}
+    <div class="row" style="margin-top:.5rem">${feita?'<button class="sec vreabrir">Reabrir vistoria</button>':'<button class="vok">'+(data.length?'Concluir vistoria':'Concluir: sem avarias')+'</button>'}<button class="sec vwpp">Enviar ao cliente</button></div></div></div>`;
+}
+function vistEventos(root,achar){
+  root.addEventListener('click',async e=>{
+    const t=e.target,card=t.closest('.card'); if(!card) return;
+    const p=achar(card.dataset.id);
+    if(t.classList.contains('vist')){
+      const b=card.querySelector('.vpanel');b.classList.toggle('oculto');
+      if(!b.classList.contains('oculto')) vistPainel(card,achar);
+    }else if(t.classList.contains('vadd')){
+      const b=card.querySelector('.vpanel'),desc=b.querySelector('.vdesc').value.trim(),area=b.querySelector('.varea').value,file=b.querySelector('.vfoto').files[0];
+      if(desc.length<3){alert('Descreva a avaria (pelo menos 3 letras).');return;}
+      t.disabled=true;
+      let path=null;
+      try{
+        if(file){
+          const blob=await comprimir(file);path=`${card.dataset.id}/vistoria-${crypto.randomUUID()}.jpg`;
+          const up=await db.storage.from('fotos').upload(path,blob,{contentType:'image/jpeg'}); if(up.error) throw up.error;
+        }
+        const ins=await db.from('vistoria_avarias').insert({pedido_id:card.dataset.id,area,descricao:desc,caminho:path});
+        if(ins.error){if(path)await db.storage.from('fotos').remove([path]);throw ins.error;}
+      }catch(err){alert('Não foi possível salvar a avaria. Tente de novo.');}
+      t.disabled=false; vistPainel(card,achar);
+    }else if(t.classList.contains('vrm')){
+      if(!confirm('Excluir esta avaria?')) return;
+      if(t.dataset.c) await db.storage.from('fotos').remove([t.dataset.c]);
+      const {error}=await db.from('vistoria_avarias').delete().eq('id',t.dataset.id);
+      if(error) alert('Não foi possível excluir.'); else vistPainel(card,achar);
+    }else if(t.classList.contains('vok')||t.classList.contains('vreabrir')){
+      const v=t.classList.contains('vok')?new Date().toISOString():null;
+      const {error}=await db.from('pedidos').update({vistoria_em:v}).eq('id',card.dataset.id);
+      if(error){alert('Não foi possível salvar.');return;}
+      if(p) p.vistoria_em=v;
+      card.querySelector('.vist').textContent=p?vistRotulo(p):'Vistoria';
+      vistPainel(card,achar);
+    }else if(t.classList.contains('vwpp')){
+      if(!p) return;
+      let d=String(p.telefone||'').replace(/\D/g,'');
+      if(d.length<10){alert('Este pedido não tem um WhatsApp válido.');return;}
+      if(d.length<=11) d='55'+d;
+      const lista=card._vist||[],nome=(p.nome||'').trim().split(' ')[0];
+      const msg=(nome?`Olá, ${nome}!`:'Olá!')+` Vistoria do seu veículo (${p.veiculo}) na chegada:\n`+(lista.length?lista.map(x=>`- ${x.area}: ${x.descricao}`).join('\n'):'Nenhuma avaria encontrada.')+'\nSe algo estiver diferente do que você viu, é só nos avisar.';
+      open('https://wa.me/'+d+'?text='+encodeURIComponent(msg),'_blank','noopener');
+    }
+  });
+}
+vistEventos($('#v0'),id=>hojePed.find(x=>x.id==id));
+vistEventos($('#v1'),id=>pedAdm.find(x=>x.id==id));
+
+/* ---------- PROTEÇÃO CONTRA PEDIDOS FALSOS ---------- */
+const fmtT8=t=>String(t).slice(0,4)+'-'+String(t).slice(4);
+async function protAdm(c){
+  const {data,error}=await db.from('telefones_bloqueados').select('*').order('criado_em',{ascending:false}).limit(50);
+  if(error){$('#protadm').innerHTML='<h2>Proteção contra pedidos falsos</h2><p class="vazio">Erro ao carregar. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  $('#protadm').innerHTML=`<h2>Proteção contra pedidos falsos</h2><div class="card">
+    <label for="pmax" style="margin-top:0">Máximo de pedidos em aberto por telefone</label>
+    <input id="pmax" type="number" min="1" max="20" step="1" value="${esc(c.max_pedidos_abertos??3)}">
+    <button class="sec" id="pmaxsv" style="margin-top:.5rem">Salvar limite</button>
+    <p style="margin:.6rem 0 0"><small>Vale para pedidos feitos pelo site e ainda não entregues. Além disso, cada telefone pode fazer até 3 pedidos por hora e o site aceita até 60 por hora. Se alguém mandar pedidos falsos, toque em "Bloquear telefone" no pedido (aba Pedidos): o número é bloqueado e os pedidos novos dele são cancelados.</small></p></div>
+    <b>Telefones bloqueados</b>`+(data.length?data.map(x=>`<div class="serv"><span>${esc(x.nome||'Sem nome')} <small>final ${esc(fmtT8(x.tel8))}</small></span><button class="sec pdes" data-t="${esc(x.tel8)}">Desbloquear</button></div>`).join(''):'<p class="vazio">Nenhum telefone bloqueado.</p>');
+}
+$('#v5').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='pmaxsv'){
+    const v=Math.round(Number($('#pmax').value));
+    if(!(v>=1&&v<=20)){alert('Informe um número de 1 a 20.');return;}
+    const {error}=await db.from('config').update({max_pedidos_abertos:v}).eq('id',1);
+    t.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>t.textContent='Salvar limite',1800);
+  } else if(t.classList.contains('pdes')){
+    if(!confirm('Desbloquear este telefone?')) return;
+    const {error}=await db.from('telefones_bloqueados').delete().eq('tel8',t.dataset.t);
+    if(error) alert('Não foi possível desbloquear.'); else horarios();
+  }
+});
+$('#v1').addEventListener('click',async e=>{
+  if(!e.target.classList.contains('blq')) return;
+  const p=pedAdm.find(x=>x.id==e.target.closest('.card').dataset.id); if(!p) return;
+  if(!confirm('Bloquear o telefone de '+p.nome+' e cancelar os pedidos novos dele? Ele não conseguirá mais pedir pelo site.')) return;
+  const {data,error}=await db.rpc('bloquear_telefone',{p_telefone:p.telefone,p_motivo:'Bloqueado pelo painel'});
+  if(error){alert('Não foi possível bloquear.');return;}
+  alert('Telefone bloqueado. '+data+(data===1?' pedido cancelado.':' pedidos cancelados.'));
+  pedidos();
+});
+
+/* ---------- FUNCIONÁRIOS ---------- */
+let funcAdm=[];
+async function carregaFunc(){const {data}=await db.from('funcionarios').select('id,nome,ativo').order('nome');funcAdm=data||[];}
+function selFunc(p){
+  const op=funcAdm.filter(f=>f.ativo||f.id===p.funcionario_id);
+  if(!op.length) return '';
+  return `<select class="fn" aria-label="Quem lavou"><option value="">Quem lavou?</option>${op.map(f=>`<option value="${f.id}" ${f.id===p.funcionario_id?'selected':''}>${esc(f.nome)}</option>`).join('')}</select>`;
+}
+[['#v0',()=>hojePed],['#v1',()=>pedAdm]].forEach(([sel,lista])=>$(sel).addEventListener('change',async e=>{
+  if(!e.target.classList.contains('fn')) return;
+  const c=e.target.closest('.card'),v=e.target.value?Number(e.target.value):null;
+  const {error}=await db.from('pedidos').update({funcionario_id:v}).eq('id',c.dataset.id);
+  if(error){alert('Não foi possível salvar quem lavou.');return;}
+  const p=lista().find(x=>x.id==c.dataset.id); if(p) p.funcionario_id=v;
+}));
+const FN_ERR={usuario_nao_encontrado:'Não existe usuário com esse e-mail. Crie o usuário antes em Authentication > Users, no Supabase.',usuario_e_admin:'Esse e-mail é de administrador. Use outro e-mail para o funcionário.',usuario_ja_vinculado:'Esse e-mail já está ligado a outro funcionário.'};
+async function equipeAdm(){
+  const {data,error}=await db.from('funcionarios').select('*').order('nome');
+  if(error){$('#equipeadm').innerHTML='<h2>Funcionários</h2><p class="vazio">Erro ao carregar. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  funcAdm=data;
+  const tipo=(t)=>`<select class="fnt" aria-label="Tipo de comissão"><option value="pct" ${t==='pct'?'selected':''}>% do valor da lavagem</option><option value="fixo" ${t==='fixo'?'selected':''}>R$ fixo por lavagem</option></select>`;
+  $('#equipeadm').innerHTML='<h2>Funcionários</h2><small>Marque em cada pedido quem lavou. A comissão do mês aparece na aba Financeiro. Para dar acesso só aos pedidos (sem valores), crie o usuário (e-mail e senha) no Supabase, em Authentication > Users, e digite o mesmo e-mail abaixo.</small>'+
+  data.map(f=>`<div class="card" data-id="${f.id}">
+    <input class="fnn" value="${esc(f.nome)}" maxlength="60" aria-label="Nome do funcionário">
+    <div class="row" style="margin-top:.5rem">${tipo(f.comissao_tipo)}<input class="fnv" type="number" min="0" step="0.01" value="${esc(f.comissao_valor)}" aria-label="Valor da comissão"></div>
+    <label class="chk" style="margin-top:.5rem"><input type="checkbox" class="fna" ${f.ativo?'checked':''}> Ativo</label>
+    <div class="row" style="margin-top:.5rem"><button class="sec fnsv">Salvar</button></div>
+    <div style="margin-top:.6rem;border-top:1px solid var(--linha);padding-top:.5rem"><small>Acesso ao painel (só pedidos): ${f.email?esc(f.email):'sem acesso'}</small>
+    <div class="row" style="margin-top:.4rem"><input class="fne" type="email" value="${esc(f.email||'')}" placeholder="E-mail do funcionário" aria-label="E-mail de acesso"><button class="sec fnl">${f.email?'Trocar e-mail':'Liberar acesso'}</button>${f.email?'<button class="sec fnr">Remover acesso</button>':''}</div></div></div>`).join('')+
+  `<div class="card"><b>Novo funcionário</b><input id="fnnn" maxlength="60" placeholder="Nome" aria-label="Nome do novo funcionário" style="margin-top:.4rem">
+    <div class="row" style="margin-top:.5rem">${tipo('pct').replace('class="fnt"','id="fnnt"')}<input id="fnnv" type="number" min="0" step="0.01" placeholder="Valor" aria-label="Valor da comissão"></div>
+    <button class="full" id="fnadd">Adicionar funcionário</button></div>`;
+}
+function fnValido(tipo,v){return v>=0&&(tipo==='fixo'?v<=10000:v<=100);}
+$('#v5').addEventListener('click',async e=>{
+  const t=e.target; if(!(t.classList.contains('fnsv')||t.classList.contains('fnl')||t.classList.contains('fnr')||t.id==='fnadd')) return;
+  if(t.id==='fnadd'){
+    const nome=$('#fnnn').value.trim(),tp=$('#fnnt').value,v=Number($('#fnnv').value||0);
+    if(nome.length<2){alert('Informe o nome do funcionário.');return;}
+    if(!fnValido(tp,v)){alert(tp==='pct'?'A comissão em % deve ficar entre 0 e 100.':'Informe um valor de comissão válido.');return;}
+    const {error}=await db.from('funcionarios').insert({nome,comissao_tipo:tp,comissao_valor:v});
+    if(error) alert('Não foi possível adicionar.'); else equipeAdm();
+    return;
+  }
+  const c=t.closest('.card'),id=c.dataset.id;
+  if(t.classList.contains('fnsv')){
+    const nome=c.querySelector('.fnn').value.trim(),tp=c.querySelector('.fnt').value,v=Number(c.querySelector('.fnv').value||0);
+    if(nome.length<2){alert('Informe o nome do funcionário.');return;}
+    if(!fnValido(tp,v)){alert(tp==='pct'?'A comissão em % deve ficar entre 0 e 100.':'Informe um valor de comissão válido.');return;}
+    const {error}=await db.from('funcionarios').update({nome,comissao_tipo:tp,comissao_valor:v,ativo:c.querySelector('.fna').checked}).eq('id',id);
+    t.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>t.textContent='Salvar',1800);
+    return;
+  }
+  const email=t.classList.contains('fnr')?'':c.querySelector('.fne').value.trim();
+  if(t.classList.contains('fnl')&&!email){alert('Digite o e-mail do funcionário.');return;}
+  if(t.classList.contains('fnr')&&!confirm('Remover o acesso deste funcionário ao painel?')) return;
+  const {error}=await db.rpc('vincular_funcionario',{p_id:id,p_email:email});
+  if(error){const k=Object.keys(FN_ERR).find(k=>String(error.message).includes(k));alert(k?FN_ERR[k]:'Não foi possível salvar o acesso.');return;}
+  equipeAdm();
+});
+
+/* ---------- PAINEL LIMITADO DO FUNCIONÁRIO ---------- */
+let sfPed=[],sfFunc=[];
+async function staffIniciar(){ if(!$('#sfd').value) $('#sfd').value=hojeBR(); staffLista(); }
+async function staffLista(){
+  const dia=$('#sfd').value||hojeBR();
+  const [p,f]=await Promise.all([db.rpc('staff_pedidos',{p_dia:dia}),db.rpc('staff_funcionarios')]);
+  if(p.error){$('#sflista').innerHTML='<p class="vazio">Erro ao carregar os pedidos.</p>';return;}
+  sfPed=p.data||[];sfFunc=f.data||[];
+  $('#sflista').innerHTML=sfPed.length?sfPed.map(x=>`<div class="card" data-id="${x.o_id}">
+    <b>${esc(new Date(x.o_data).toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'}))}</b> · ${esc(x.o_nome)}${x.o_leva_traz?' · 🚗 leva e traz':''}<br>
+    ${esc(x.o_veiculo)} <small>· ${esc(x.o_servico||'')}</small>${x.o_obs?`<br><small>${esc(x.o_obs)}</small>`:''}${x.o_leva_traz?`<br><small>${esc(x.o_endereco||'')} <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.o_endereco||'')}" target="_blank" rel="noopener">Mapa</a></small>`:''}
+    <div class="row" style="margin-top:.5rem"><select class="sst" aria-label="Situação">${STATUS.map(s=>`<option ${s===x.o_status?'selected':''}>${s}</option>`).join('')}</select>
+    <select class="sfn" aria-label="Quem lavou"><option value="">Quem lavou?</option>${sfFunc.map(f=>`<option value="${f.o_id}" ${f.o_id===x.o_funcionario_id?'selected':''}>${esc(f.o_nome)}</option>`).join('')}</select>
+    <button class="sec swpp">Avisar cliente</button></div></div>`).join(''):'<p class="vazio">Nenhum pedido neste dia.</p>';
+}
+$('#sfd').addEventListener('change',staffLista);
+$('#sairfn').onclick=async()=>{await db.auth.signOut();iniciarAdmin();};
+$('#sflista').addEventListener('change',async e=>{
+  const c=e.target.closest('.card'); if(!c) return;
+  let r;
+  if(e.target.classList.contains('sst')) r=await db.rpc('staff_definir_status',{p_id:c.dataset.id,p_status:e.target.value});
+  else if(e.target.classList.contains('sfn')) r=await db.rpc('staff_definir_funcionario',{p_id:c.dataset.id,p_funcionario_id:e.target.value?Number(e.target.value):null});
+  else return;
+  if(r.error){alert('Não foi possível salvar. Tente de novo.');staffLista();return;}
+  const x=sfPed.find(y=>y.o_id==c.dataset.id);
+  if(x){ if(e.target.classList.contains('sst')) x.o_status=e.target.value; else x.o_funcionario_id=e.target.value?Number(e.target.value):null; }
+});
+$('#sflista').addEventListener('click',e=>{
+  if(!e.target.classList.contains('swpp')) return;
+  const c=e.target.closest('.card'),x=sfPed.find(y=>y.o_id==c.dataset.id); if(!x) return;
+  avisarWpp({nome:x.o_nome,telefone:x.o_telefone,veiculo:x.o_veiculo,servico_nome:x.o_servico,data_hora:x.o_data,leva_traz:x.o_leva_traz,endereco:x.o_endereco,codigo:x.o_codigo},c.querySelector('.sst').value);
+});
+
+/* ---------- FICHA DO CLIENTE ---------- */
+let fiAll=[],fiQ='',fiLim=30;
+const fiDia=x=>x?new Date(x).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',year:'2-digit',timeZone:'America/Porto_Velho'}):'-';
+async function fichas(){
+  $('#v8').innerHTML='<p class="vazio">Carregando...</p>';
+  const {data,error}=await db.rpc('fichas_clientes');
+  if(error){$('#v8').innerHTML='<p class="vazio">Erro ao carregar as fichas. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  fiAll=data||[];fiQ='';fiLim=30;
+  $('#v8').innerHTML=`<div class="card"><input id="fiq" type="search" placeholder="Buscar por nome, telefone ou placa" aria-label="Buscar cliente" autocomplete="off"><p style="margin:.5rem 0 0"><small id="fiinfo"></small></p></div><div id="filista"></div><button id="fimais" class="sec full oculto">Mostrar mais clientes</button>`;
+  fiLista();
+}
+function fiLista(){
+  const q=fiQ.trim().toLowerCase(),dq=q.replace(/\D/g,'');
+  const r=fiAll.filter(f=>!q||String(f.o_nome||'').toLowerCase().includes(q)||(dq.length>=3&&String(f.o_telefone||'').replace(/\D/g,'').includes(dq))||(f.o_veiculos||[]).some(v=>String(v).toLowerCase().includes(q)));
+  $('#fiinfo').textContent=r.length?('Mostrando '+Math.min(fiLim,r.length)+' de '+r.length+(r.length===1?' cliente':' clientes')):'';
+  $('#fimais').classList.toggle('oculto',r.length<=fiLim);
+  $('#filista').innerHTML=r.length?r.slice(0,fiLim).map(f=>`<div class="card" data-chave="${esc(f.o_chave)}">
+    <b>${esc(f.o_nome)}</b>${String(f.o_chave).startsWith('c')?' <small>· cliente fixo</small>':''}<br>
+    <small>${esc(fmtTel(f.o_telefone)||'')}</small><br>
+    ${f.o_lavagens} ${f.o_lavagens===1?'lavagem':'lavagens'} · gasto ${brl(f.o_total)}${Number(f.o_a_receber)>0?' · <b>a receber '+brl(f.o_a_receber)+'</b>':''}<br>
+    <small>Última: ${fiDia(f.o_ultima)} · ${(f.o_veiculos||[]).length} ${(f.o_veiculos||[]).length===1?'veículo':'veículos'}</small>
+    <div class="row" style="margin-top:.5rem"><button class="sec fiab">Abrir ficha</button></div>
+    <div class="fip oculto" style="margin-top:.6rem"></div></div>`).join(''):'<p class="vazio">'+(fiAll.length?'Nenhum cliente encontrado.':'Ainda não há clientes com pedidos.')+'</p>';
+}
+async function fiAbrir(card){
+  const box=card.querySelector('.fip'),f=fiAll.find(x=>x.o_chave===card.dataset.chave); if(!f) return;
+  if(!box.classList.contains('oculto')){box.classList.add('oculto');card.querySelector('.fiab').textContent='Abrir ficha';return;}
+  box.classList.remove('oculto');card.querySelector('.fiab').textContent='Fechar ficha';
+  const d=soDig(f.o_telefone);
+  box.innerHTML=`<div style="border-top:1px solid var(--linha);padding-top:.6rem">
+    ${d.length>=10?`<a href="https://wa.me/55${esc(d.replace(/^55/,''))}" target="_blank" rel="noopener">Chamar no WhatsApp</a><br>`:''}
+    <b>Veículos</b><br><small>${(f.o_veiculos||[]).map(esc).join(' · ')||'-'}</small>
+    <label for="fio${esc(f.o_chave)}" style="margin-top:.8rem">Observações do dono</label>
+    <textarea class="fio" id="fio${esc(f.o_chave)}" rows="3" maxlength="1000" placeholder="Ex.: prefere lavar de manhã, paga no fim do mês">${esc(f.o_obs||'')}</textarea>
+    <button class="sec fisv" style="margin-top:.4rem">Salvar observações</button>
+    <p style="margin:.8rem 0 .3rem"><b>Histórico de lavagens</b></p><div class="fih"><small>Carregando...</small></div></div>`;
+  const {data,error}=await db.rpc('ficha_pedidos',{p_chave:f.o_chave});
+  const h=box.querySelector('.fih'); if(!h) return;
+  h.innerHTML=error?'<small>Não foi possível carregar o histórico.</small>':(data&&data.length?data.map(x=>`<div class="serv"><span>${fiDia(x.o_data)} · ${esc(x.o_servico||'')}<br><small>${esc(x.o_veiculo||'')} · ${esc(x.o_status)}${x.o_status==='cancelado'?'':(x.o_pago?' · pago':' · não pago')}</small></span><span class="preco">${brl(x.o_valor)}</span></div>`).join('')+(data.length>=200?'<small>Mostrando os 200 pedidos mais recentes.</small>':''):'<small>Sem pedidos.</small>');
+}
+$('#v8').addEventListener('input',e=>{if(e.target.id==='fiq'){fiQ=e.target.value;fiLim=30;fiLista();}});
+$('#v8').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='fimais'){fiLim+=30;fiLista();return;}
+  const card=t.closest('.card'); if(!card||!card.dataset.chave) return;
+  if(t.classList.contains('fiab')) fiAbrir(card);
+  else if(t.classList.contains('fisv')){
+    const f=fiAll.find(x=>x.o_chave===card.dataset.chave); if(!f) return;
+    const obs=card.querySelector('.fio').value.trim();
+    const {error}=obs?await db.from('cliente_notas').upsert({chave:f.o_chave,obs,atualizado_em:new Date().toISOString()},{onConflict:'chave'}):await db.from('cliente_notas').delete().eq('chave',f.o_chave);
+    if(!error) f.o_obs=obs||null;
+    t.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>t.textContent='Salvar observações',1800);
+  }
+});
+
+/* ---------- REMARCAR PEDIDO ---------- */
+const REM_ERR={horario_indisponivel:'Esse horário acabou de ser preenchido. Escolha outro.',pedido_nao_remarcavel:'Pedidos entregues ou cancelados não podem ser remarcados.',nao_autorizado:'Sem permissão para remarcar.'};
+function remAbrir(card){
+  const box=card.querySelector('.rpanel'); if(!box) return;
+  if(!box.classList.contains('oculto')){box.classList.add('oculto');return;}
+  box.classList.remove('oculto');
+  box.innerHTML=`<div style="border-top:1px solid var(--linha);padding-top:.6rem"><b>Remarcar para</b>
+    <label style="margin:.4rem 0 .15rem">Dia</label><input class="remd" type="date" value="${hojeBR()}" min="${hojeBR()}" aria-label="Novo dia">
+    <label style="margin:.4rem 0 .15rem">Horário</label><select class="remh" aria-label="Novo horário"></select>
+    <div class="row" style="margin-top:.6rem"><button class="remok">Confirmar</button><button class="sec remx">Fechar</button></div><div class="remr"></div></div>`;
+  remHorarios(card);
+}
+async function remHorarios(card){
+  const d=card.querySelector('.remd').value,sel=card.querySelector('.remh');
+  if(!d){sel.innerHTML='<option value="">Escolha o dia</option>';return;}
+  sel.innerHTML='<option value="">Carregando...</option>';
+  const {data,error}=await db.rpc('horarios_disponiveis',{p_dia:d});
+  if(card.querySelector('.remd').value!==d) return;
+  sel.innerHTML=(error||!data||!data.length)?'<option value="">'+(error?'Não foi possível carregar os horários':'Sem horários livres neste dia')+'</option>':data.map(x=>`<option value="${esc(x.o_hora)}">${new Date(x.o_hora).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'})} · ${x.o_vagas} ${x.o_vagas>1?'vagas':'vaga'}</option>`).join('');
+}
+async function remConfirmar(card,p,btn,atualizar){
+  const hv=card.querySelector('.remh').value,r=card.querySelector('.remr');
+  if(!hv){r.innerHTML='<div class="msg erro">Escolha um dia e um horário livre.</div>';return;}
+  btn.disabled=true;
+  const {error}=await db.rpc('remarcar_pedido',{p_id:p.id,p_data_hora:hv});
+  btn.disabled=false;
+  if(error){
+    const k=Object.keys(REM_ERR).find(k=>String(error.message).includes(k));
+    r.innerHTML='<div class="msg erro">'+(k?REM_ERR[k]:'Não foi possível remarcar. Tente de novo.')+'</div>';
+    if(k==='horario_indisponivel') remHorarios(card);
+    return;
+  }
+  p.data_hora=hv;
+  const quando=new Date(hv).toLocaleString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'});
+  let d=String(p.telefone||'').replace(/\D/g,''); if(d.length>=10&&d.length<=11) d='55'+d;
+  const msg='Olá, '+p.nome+'! Seu pedido ('+p.servico_nome+' - '+p.veiculo+') foi remarcado para '+quando+'.';
+  r.innerHTML='<div class="msg">Pedido remarcado para '+esc(quando)+'.</div>'+(d.length>=12?'<p style="margin:.6rem 0 0"><a href="https://wa.me/'+d+'?text='+encodeURIComponent(msg)+'" target="_blank" rel="noopener">Avisar o cliente pelo WhatsApp</a></p>':'');
+  card.querySelector('.remok').classList.add('oculto');
+  card.querySelector('.remx').textContent='Concluir';
+  card.dataset.remfeito='1';
+}
+function remEventos(root,achar,atualizar){
+  root.addEventListener('click',e=>{
+    const t=e.target,card=t.closest('.card'); if(!card) return;
+    if(t.classList.contains('rem')) remAbrir(card);
+    else if(t.classList.contains('remx')){ if(card.dataset.remfeito) atualizar(); else card.querySelector('.rpanel').classList.add('oculto'); }
+    else if(t.classList.contains('remok')){const p=achar(card.dataset.id); if(p) remConfirmar(card,p,t,atualizar);}
+  });
+  root.addEventListener('change',e=>{ if(e.target.classList.contains('remd')) remHorarios(e.target.closest('.card')); });
+}
+remEventos($('#v0'),id=>hojePed.find(x=>x.id==id),()=>telaHoje());
+remEventos($('#v1'),id=>pedAdm.find(x=>x.id==id),()=>pedidos());
+
+/* ---------- NOVO PEDIDO PELO PAINEL ---------- */
+let npSvc=[],npCfg={};
+function npFechar(){ $('#np').innerHTML='<button id="npabrir" class="full" style="margin-top:0">+ Novo pedido</button>'; }
+async function npAbrir(){
+  const [s,c]=await Promise.all([db.from('servicos').select('*').eq('ativo',true).order('nome'),db.from('config').select('leva_traz_ativo,taxa_leva_traz').eq('id',1).single()]);
+  if(s.error){alert('Não foi possível carregar os serviços.');return;}
+  if(!s.data.length){alert('Cadastre pelo menos um serviço na aba Serviços antes de criar pedidos.');return;}
+  npSvc=s.data; npCfg=c.data||{};
+  $('#np').innerHTML=`<div class="card"><b>Novo pedido</b>
+    <label for="npn">Nome do cliente</label><input id="npn" maxlength="80">
+    <label for="npt">WhatsApp (opcional)</label><input id="npt" type="tel" placeholder="(69) 99999-9999">
+    <label for="npv">Veículo (modelo e placa)</label><input id="npv" maxlength="80">
+    <label for="nps">Serviço</label><select id="nps">${npSvc.map(x=>`<option value="${x.id}">${esc(x.nome)} — ${brl(x.preco)}</option>`).join('')}</select>
+    <label for="npd">Dia</label><input id="npd" type="date" value="${hojeBR()}" min="${hojeBR()}">
+    <label for="nph">Horário</label><select id="nph"></select>
+    <label for="npo">Observações (opcional)</label><input id="npo" maxlength="300">
+    ${npCfg.leva_traz_ativo?`<label class="chk" style="margin-top:.8rem"><input type="checkbox" id="npl"> Leva e traz (${Number(npCfg.taxa_leva_traz)>0?'+ '+brl(npCfg.taxa_leva_traz):'sem taxa'})</label><div id="nple" class="oculto"><label for="npe">Endereço</label><input id="npe" maxlength="200" placeholder="Rua, número, bairro e cidade"></div>`:''}
+    <div class="row" style="margin-top:1rem"><button id="npsalvar">Criar pedido</button><button class="sec" id="npcancelar">Cancelar</button></div><div id="npresp"></div></div>`;
+  npHorarios();
+}
+async function npHorarios(){
+  const d=$('#npd').value,sel=$('#nph');
+  const {data}=await db.rpc('horarios_disponiveis',{p_dia:d});
+  const opc=(d===hojeBR()?['<option value="agora">Agora (cliente no local)</option>']:[]).concat((data||[]).map(x=>`<option value="${esc(x.o_hora)}">${new Date(x.o_hora).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',timeZone:'America/Porto_Velho'})} · ${x.o_vagas} ${x.o_vagas>1?'vagas':'vaga'}</option>`));
+  sel.innerHTML=opc.length?opc.join(''):'<option value="">Sem horários livres neste dia</option>';
+}
+async function npSalvar(btn){
+  const nome=$('#npn').value.trim(),veic=$('#npv').value.trim(),sv=npSvc.find(x=>x.id==$('#nps').value),hv=$('#nph').value;
+  const lt=!!($('#npl')&&$('#npl').checked),end=lt?$('#npe').value.trim():'',tel=soDig($('#npt').value);
+  if(nome.length<2||veic.length<2||!sv){alert('Informe o nome do cliente e o veículo.');return;}
+  if(tel&&tel.length<10){alert('O WhatsApp precisa ter DDD e número, ou deixe o campo em branco.');return;}
+  if(!hv){alert('Escolha um horário.');return;}
+  if(lt&&end.length<10){alert('Informe o endereço completo para o leva e traz.');return;}
+  btn.disabled=true;
+  const {data,error}=await db.from('pedidos').insert({nome,telefone:tel||'-',veiculo:veic,servico_id:sv.id,servico_nome:sv.nome,preco:sv.preco,data_hora:hv==='agora'?new Date().toISOString():hv,obs:$('#npo').value.trim()||null,status:'novo',pago:false,leva_traz:lt,endereco:lt?end:null,taxa:lt?(Number(npCfg.taxa_leva_traz)||0):0}).select().single();
+  btn.disabled=false;
+  if(error||!data){$('#npresp').innerHTML='<div class="msg erro">Não foi possível criar o pedido. Confira os dados e tente de novo.</div>';return;}
+  npFechar();pedMarcaVisto();
+  $('#np').insertAdjacentHTML('afterbegin',`<div class="msg">Pedido criado! Código para o cliente acompanhar: <b>${esc(data.codigo)}</b>.</div>`);
+  pedidos(); telaHoje();
+}
+$('#np').addEventListener('click',e=>{
+  const t=e.target;
+  if(t.id==='npabrir') npAbrir();
+  if(t.id==='npcancelar') npFechar();
+  if(t.id==='npsalvar') npSalvar(t);
+});
+$('#np').addEventListener('change',e=>{
+  if(e.target.id==='npd') npHorarios();
+  if(e.target.id==='npl') $('#nple').classList.toggle('oculto',!e.target.checked);
+});
+
+/* ---------- AVISAR CLIENTE (WHATSAPP) ---------- */
+let pedAdm=[];
+function msgWpp(p,st){
+  const nome=(p.nome||'').trim().split(' ')[0],ola=nome?`Olá, ${nome}!`:'Olá!';
+  const link=location.origin+location.pathname;
+  const quando=new Date(p.data_hora).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short',timeZone:'America/Porto_Velho'});
+  const M={
+    novo:`${ola} Recebemos seu pedido de ${p.servico_nome} para ${quando}. Está confirmado.${p.leva_traz?` Vamos buscar o veículo em: ${p.endereco}.`:''} Para acompanhar, acesse ${link} e use o código ${p.codigo}.`,
+    lavando:`${ola} Seu veículo (${p.veiculo}) já está sendo lavado. Avisamos quando ficar pronto.`,
+    pronto:`${ola} Seu veículo (${p.veiculo}) está pronto, ${p.leva_traz?'vamos levar de volta no endereço combinado':'pode retirar'}. Obrigado! Depois conte como foi em ${link} (código ${p.codigo}).`,
+    entregue:`${ola} Obrigado pela preferência! Se puder, avalie o serviço em ${link} com o código ${p.codigo}.`,
+    cancelado:`${ola} Seu pedido de ${p.servico_nome} foi cancelado. Se quiser reagendar, é só responder esta mensagem.`};
+  return M[st]||M.novo;
+}
+
+/* ---------- FOTOS ---------- */
+async function comprimir(file){
+  const bmp=await createImageBitmap(file,{imageOrientation:'from-image'});
+  const fator=Math.min(1,1280/Math.max(bmp.width,bmp.height));
+  const cv=document.createElement('canvas');cv.width=Math.round(bmp.width*fator);cv.height=Math.round(bmp.height*fator);
+  cv.getContext('2d').drawImage(bmp,0,0,cv.width,cv.height);
+  return new Promise((ok,err)=>cv.toBlob(b=>b?ok(b):err(new Error('falha')),'image/jpeg',.78));
+}
+async function fotosPainel(card){
+  const id=card.dataset.id,box=card.querySelector('.fpanel');
+  const {data,error}=await db.from('fotos_pedido').select('*').eq('pedido_id',id).order('criado_em');
+  if(error){box.innerHTML='<small>Erro ao carregar as fotos. Confira se o arquivo supabase.sql foi executado.</small>';return;}
+  const urls={};
+  if(data.length){const {data:s}=await db.storage.from('fotos').createSignedUrls(data.map(f=>f.caminho),3600);(s||[]).forEach(x=>{if(x.signedUrl)urls[x.path]=x.signedUrl;});}
+  box.innerHTML=['antes','depois'].map(tp=>`<div style="margin-top:.7rem"><b>${tp==='antes'?'Antes':'Depois'}</b>
+    <div class="row" style="margin-top:.4rem">${data.filter(f=>f.tipo===tp).map(f=>`<div style="flex:0 0 96px"><img src="${esc(urls[f.caminho]||'')}" alt="Foto ${tp} da lavagem" style="width:96px;height:96px;object-fit:cover;border-radius:6px"><br><button class="sec fcp" data-c="${esc(f.caminho)}" style="padding:.2rem .4rem;font-size:.75rem">Link</button> <button class="sec frm" data-id="${f.id}" data-c="${esc(f.caminho)}" style="padding:.2rem .4rem;font-size:.75rem">Excluir</button></div>`).join('')}</div>
+    <label style="display:inline-block;margin-top:.5rem"><span class="btnlike">+ Adicionar foto</span><input type="file" accept="image/*" class="fin oculto" data-tipo="${tp}"></label></div>`).join('');
+}
+$('#v1').addEventListener('change',async e=>{
+  const inp=e.target; if(!inp.classList.contains('fin')||!inp.files[0]) return;
+  const card=inp.closest('.card'),id=card.dataset.id,tipo=inp.dataset.tipo,file=inp.files[0];
+  card.querySelector('.fpanel').insertAdjacentHTML('afterbegin','<small>Enviando foto...</small>');
+  try{
+    const blob=await comprimir(file),path=`${id}/${tipo}-${crypto.randomUUID()}.jpg`;
+    const up=await db.storage.from('fotos').upload(path,blob,{contentType:'image/jpeg'}); if(up.error) throw up.error;
+    const ins=await db.from('fotos_pedido').insert({pedido_id:id,tipo,caminho:path});
+    if(ins.error){await db.storage.from('fotos').remove([path]);throw ins.error;}
+  }catch(err){alert('Não foi possível enviar a foto. Tente de novo.');}
+  inp.value=''; fotosPainel(card);
+});
+$('#v1').addEventListener('click',async e=>{
+  const t=e.target,card=t.closest('.card'); if(!card) return;
+  if(t.classList.contains('fdap')||t.classList.contains('dap')||t.classList.contains('drm')){
+    const p=pedAdm.find(x=>x.id==card.dataset.id); if(!p) return;
+    let upd;
+    if(t.classList.contains('fdap')){
+      const pct=Number(fdCfg.fidelidade_pct)||100,desc=Math.round(Number(p.preco)*pct)/100;
+      if(!confirm('Aplicar '+pct+'% de desconto de fidelidade ('+brl(desc)+') neste pedido?')) return;
+      upd={desconto:desc,resgate:true};
+    }else if(t.classList.contains('dap')){
+      const v=Number(card.querySelector('.dval').value);
+      if(!(v>=0)||v>Number(p.preco)+Number(p.taxa||0)){alert('Informe um desconto entre zero e o valor do pedido.');return;}
+      upd={desconto:v,resgate:v>0?!!p.resgate:false};
+    }else upd={desconto:0,resgate:false};
+    const {error}=await db.from('pedidos').update(upd).eq('id',p.id);
+    if(error) alert('Não foi possível salvar o desconto.'); else pedidos();
+    return;
+  }
+  if(t.classList.contains('wpp')){
+    const p=pedAdm.find(x=>x.id==card.dataset.id); if(!p) return;
+    avisarWpp(p,card.querySelector('.st').value);
+    return;
+  }
+  if(t.classList.contains('fbtn')){const b=card.querySelector('.fpanel');b.classList.toggle('oculto');if(!b.classList.contains('oculto'))fotosPainel(card);}
+  if(t.classList.contains('fcp')){
+    const {data,error}=await db.storage.from('fotos').createSignedUrl(t.dataset.c,604800);
+    if(error){alert('Não foi possível gerar o link.');return;}
+    try{await navigator.clipboard.writeText(data.signedUrl);t.textContent='Copiado';}catch(err){prompt('Copie o link (vale por 7 dias):',data.signedUrl);}
+    setTimeout(()=>t.textContent='Link',1800);
+  }
+  if(t.classList.contains('frm')){
+    if(!confirm('Excluir esta foto?')) return;
+    await db.storage.from('fotos').remove([t.dataset.c]);
+    const {error}=await db.from('fotos_pedido').delete().eq('id',t.dataset.id);
+    if(error) alert('Não foi possível excluir a foto.'); else fotosPainel(card);
+  }
+});
+
+/* ---------- CLIENTES FIXOS ---------- */
+let svAdm=[],clAdm=[],pcAdm=[];
+const precoDe=(cid,s)=>{const x=pcAdm.find(y=>y.cliente_id==cid&&y.servico_id==s.id);return x?Number(x.preco):Number(s.preco);};
+function opcoes(){const cid=$('#lc').value,sel=$('#ls').value;$('#ls').innerHTML=svAdm.map(x=>`<option value="${x.id}">${esc(x.nome)} — ${brl(precoDe(cid,x))}</option>`).join('');if(sel)$('#ls').value=sel;}
+async function clientes(){
+  const [c,s,p,pr]=await Promise.all([
+    db.from('clientes').select('*').order('nome'),
+    db.from('servicos').select('*').eq('ativo',true).order('nome'),
+    db.rpc('devedores_fixos'),
+    db.from('precos_cliente').select('*')]);
+  if(c.error||s.error||pr.error){$('#v3').innerHTML='<p class="vazio">Erro ao carregar clientes.</p>';return;}
+  clAdm=c.data;svAdm=s.data;pcAdm=pr.data;
+  const dev={};
+  if(!p.error) p.data.forEach(x=>dev[x.o_cliente_id]=Number(x.o_total));
+  else{
+    const q=await db.from('pedidos').select('cliente_id,preco,pago,status').not('cliente_id','is',null);
+    if(q.error){$('#v3').innerHTML='<p class="vazio">Erro ao carregar clientes.</p>';return;}
+    q.data.filter(x=>!x.pago&&x.status!=='cancelado').forEach(x=>dev[x.cliente_id]=(dev[x.cliente_id]||0)+Number(x.preco));
+  }
+  $('#v3').innerHTML=`<div class="card"><b>Lançar pedidos para cliente fixo</b>
+    <label for="lc">Cliente</label><select id="lc">${c.data.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join('')}</select>
+    <label for="ls">Serviço</label><select id="ls">${s.data.map(x=>`<option value="${x.id}">${esc(x.nome)} — ${brl(x.preco)}</option>`).join('')}</select>
+    <label for="lv">Veículos (um por linha)</label><textarea id="lv" rows="4" placeholder="Hilux branca ABC-1234&#10;Caminhão pipa DEF-5678"></textarea>
+    <button class="full" id="lancar">Lançar pedidos</button></div>
+    <h2>Clientes fixos</h2>`+
+    (c.data.length?c.data.map(x=>`<div class="card row" data-id="${x.id}"><div><b>${esc(x.nome)}</b><br><small>${esc(x.telefone||'')}</small></div><div>A receber: <b class="dev">${brl(dev[x.id]||0)}</b></div><button class="sec quitar" ${dev[x.id]?'':'disabled'}>Marcar tudo como pago</button><button class="sec fech">Fechamento do mês</button><div class="fecp oculto" style="flex:1 1 100%"></div></div>`).join(''):'<p class="vazio">Nenhum cliente fixo ainda. Cadastre o primeiro abaixo.</p>')+
+    `<h2>Novo cliente fixo</h2><div class="card row"><input id="cn" placeholder="Nome (ex.: Prefeitura)"><input id="ct" type="tel" placeholder="Telefone"><button id="cadd">Adicionar</button></div>
+    <h2>Preços combinados</h2>`+
+    (pr.data.length?pr.data.map(x=>{const cl=c.data.find(y=>y.id==x.cliente_id),sv=s.data.find(y=>y.id==x.servico_id);
+      return `<div class="serv"><span>${esc(cl?cl.nome:'?')} · ${esc(sv?sv.nome:'?')} <small>(padrão ${sv?brl(sv.preco):'-'})</small></span><span class="preco">${brl(x.preco)} <button class="sec rmp" data-id="${x.id}">Remover</button></span></div>`;}).join(''):'<p class="vazio">Nenhum preço combinado. Sem ele, o cliente paga o valor padrão.</p>')+
+    (c.data.length&&s.data.length?`<div class="card"><label for="pc">Cliente</label><select id="pc">${c.data.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join('')}</select>
+    <label for="ps">Serviço</label><select id="ps">${s.data.map(x=>`<option value="${x.id}">${esc(x.nome)}</option>`).join('')}</select>
+    <label for="pv">Valor combinado (R$)</label><input id="pv" type="number" step="0.01" min="0">
+    <button class="full" id="psalvar">Salvar preço</button></div>`:'');
+  opcoes();$('#lc').onchange=opcoes;
+}
+/* ---------- FECHAMENTO MENSAL DO CLIENTE FIXO ---------- */
+const fecVal=x=>Number(x.preco||0)+Number(x.taxa||0)-Number(x.desconto||0);
+function fecIntervalo(mes){
+  const [a,m]=mes.split('-').map(Number),prox=m===12?`${a+1}-01`:`${a}-${String(m+1).padStart(2,'0')}`;
+  return [new Date(mes+'-01T00:00:00-04:00').toISOString(),new Date(prox+'-01T00:00:00-04:00').toISOString()];
+}
+function fecAbrir(card){
+  const box=card.querySelector('.fecp');
+  if(!box.classList.contains('oculto')){box.classList.add('oculto');return;}
+  box.classList.remove('oculto');
+  box.innerHTML=`<div style="border-top:1px solid var(--linha);padding-top:.6rem"><label style="margin:0 0 .15rem">Mês do fechamento<input class="fecm" type="month" value="${hojeBR().slice(0,7)}"></label><div class="fecr"></div></div>`;
+  fecCarregar(card);
+}
+async function fecCarregar(card){
+  const mes=card.querySelector('.fecm').value,r=card.querySelector('.fecr');
+  if(!mes){r.innerHTML='';return;}
+  r.innerHTML='<small>Carregando...</small>';
+  const [ini,fim]=fecIntervalo(mes);
+  const {data,error}=await db.from('pedidos').select('id,data_hora,servico_nome,veiculo,preco,taxa,desconto,pago,status').eq('cliente_id',card.dataset.id).neq('status','cancelado').gte('data_hora',ini).lt('data_hora',fim).order('data_hora').range(0,999);
+  if(card.querySelector('.fecm').value!==mes) return;
+  if(error){r.innerHTML='<div class="msg erro">Não foi possível carregar o fechamento.</div>';return;}
+  const tot=data.reduce((t,x)=>t+fecVal(x),0),pago=data.filter(x=>x.pago).reduce((t,x)=>t+fecVal(x),0),aberto=tot-pago,nAb=data.filter(x=>!x.pago).length;
+  card._fec={mes,data,aberto,nAb};
+  r.innerHTML=data.length?`<div class="row" style="margin:.5rem 0"><div><small>Lavagens</small><br><b>${data.length}</b></div><div><small>Total</small><br><b>${brl(tot)}</b></div><div><small>Pago</small><br><b>${brl(pago)}</b></div><div><small>A receber</small><br><b>${brl(aberto)}</b></div></div>`+
+    data.map(x=>`<div class="serv"><span>${new Date(x.data_hora).toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit',timeZone:'America/Porto_Velho'})} · ${esc(x.servico_nome||'')}<br><small>${esc(x.veiculo)} · ${x.pago?'pago':'não pago'}${['entregue'].includes(x.status)?'':' · '+esc(x.status)}</small></span><span class="preco">${brl(fecVal(x))}</span></div>`).join('')+
+    `<div class="row" style="margin-top:.6rem"><button class="fecpg" ${nAb?'':'disabled'}>Marcar o mês como pago</button><button class="sec fecxl">Baixar planilha</button></div>`
+    :'<p class="vazio">Nenhuma lavagem neste mês.</p>';
+}
+async function fecPagar(card){
+  const f=card._fec; if(!f||!f.nAb) return;
+  const rotulo=new Date(f.mes+'-15T12:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'});
+  const naoEnt=f.data.filter(x=>!x.pago&&x.status!=='entregue').length;
+  if(!confirm('Marcar como pagos os '+f.nAb+' pedidos em aberto de '+rotulo+' ('+brl(f.aberto)+')?'+(naoEnt?'\n\nAtenção: '+naoEnt+' ainda não foram marcados como entregues.':''))) return;
+  const [ini,fim]=fecIntervalo(f.mes);
+  const {error}=await db.from('pedidos').update({pago:true}).eq('cliente_id',card.dataset.id).eq('pago',false).neq('status','cancelado').gte('data_hora',ini).lt('data_hora',fim);
+  if(error){alert('Não foi possível salvar.');return;}
+  fecCarregar(card);
+  const q=await db.rpc('devedores_fixos');
+  if(!q.error){const l=q.data.find(x=>x.o_cliente_id==card.dataset.id),v=l?Number(l.o_total):0;card.querySelector('.dev').textContent=brl(v);card.querySelector('.quitar').disabled=!v;}
+}
+function fecPlanilha(card){
+  const f=card._fec; if(!f||!f.data.length) return;
+  const nome=card.querySelector('b').textContent;
+  const rows=f.data.map(x=>({Data:new Date(x.data_hora).toLocaleDateString('pt-BR',{timeZone:'America/Porto_Velho'}),Serviço:x.servico_nome||'',Veículo:x.veiculo,Valor:fecVal(x),Situação:x.pago?'pago':'não pago'}));
+  rows.push({Data:'',Serviço:'Total',Veículo:'',Valor:f.data.reduce((t,x)=>t+fecVal(x),0),Situação:''},{Data:'',Serviço:'A receber',Veículo:'',Valor:f.aberto,Situação:''});
+  const slug=nome.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()||'cliente';
+  baixar('fechamento-'+slug+'-'+f.mes+'.csv',paraCsv(rows),'text/csv;charset=utf-8');
+}
+$('#v3').addEventListener('change',e=>{if(e.target.classList.contains('fecm')) fecCarregar(e.target.closest('.card'));});
+$('#v3').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.classList.contains('fech')) fecAbrir(t.closest('.card'));
+  else if(t.classList.contains('fecpg')) fecPagar(t.closest('.card'));
+  else if(t.classList.contains('fecxl')) fecPlanilha(t.closest('.card'));
+});
+$('#v3').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='cadd'){
+    const nome=$('#cn').value.trim(); if(!nome) return;
+    const {error}=await db.from('clientes').insert({nome,telefone:$('#ct').value.trim()});
+    if(error) alert('Não foi possível adicionar.'); else clientes();
+  }
+  if(t.id==='lancar'){
+    const c=clAdm.find(x=>x.id==$('#lc').value),s=svAdm.find(x=>x.id==$('#ls').value);
+    const veic=$('#lv').value.split('\n').map(x=>x.trim()).filter(Boolean);
+    if(!c||!s||!veic.length){alert('Escolha o cliente, o serviço e informe ao menos um veículo.');return;}
+    const rows=veic.map(v=>({nome:c.nome,telefone:c.telefone||'-',veiculo:v,servico_id:s.id,servico_nome:s.nome,preco:precoDe(c.id,s),data_hora:new Date().toISOString(),cliente_id:c.id}));
+    const {error}=await db.from('pedidos').insert(rows);
+    if(error) alert('Não foi possível lançar os pedidos.'); else {alert(rows.length+' pedido(s) lançado(s), total '+brl(rows.reduce((a,r)=>a+r.preco,0))+'.');clientes();}
+  }
+  if(t.id==='psalvar'){
+    const cid=$('#pc').value,sid=$('#ps').value,v=$('#pv').value; if(!cid||!sid||v==='') return;
+    const {error}=await db.from('precos_cliente').upsert({cliente_id:cid,servico_id:sid,preco:v},{onConflict:'cliente_id,servico_id'});
+    if(error) alert('Não foi possível salvar o preço.'); else clientes();
+  }
+  if(t.classList.contains('rmp')){
+    const {error}=await db.from('precos_cliente').delete().eq('id',t.dataset.id);
+    if(error) alert('Não foi possível remover.'); else clientes();
+  }
+  if(t.classList.contains('quitar')){
+    if(!confirm('Marcar todos os pedidos deste cliente como pagos?')) return;
+    const {error}=await db.from('pedidos').update({pago:true}).eq('cliente_id',t.closest('.card').dataset.id).eq('pago',false).neq('status','cancelado');
+    if(error) alert('Não foi possível salvar.'); else clientes();
+  }
+});
+
+/* ---------- EXPORTAR E BACKUP ---------- */
+const EXP=[['pedidos','Pedidos','id'],['clientes','Clientes fixos','id'],['servicos','Serviços e preços','id'],['despesas','Despesas','id'],['avaliacoes','Avaliações (sem fotos)','id']];
+const BKP=[['servicos','id'],['clientes','id'],['precos_cliente','id'],['funcionarios','id'],['pedidos','id'],['pedidos_historico','id'],['despesas','id'],['config','id'],['contatos','id'],['dias_fechados','dia'],['bloqueios_horario','id'],['avaliacoes','id'],['avaliacao_fotos','id'],['fotos_pedido','id'],['vistoria_avarias','id'],['cliente_notas','chave']];
+const hojeBR=()=>new Date().toLocaleDateString('en-CA',{timeZone:'America/Porto_Velho'});
+async function todas(t,ordem){
+  const out=[];
+  for(let i=0;;i+=1000){
+    const {data,error}=await db.from(t).select('*').order(ordem).range(i,i+999);
+    if(error) throw new Error(t);
+    out.push(...data); if(data.length<1000) break;
+  }
+  return out;
+}
+function celula(v){
+  if(v===null||v===undefined) return '';
+  if(typeof v==='number') return String(v).replace('.',',');
+  let s=typeof v==='object'?JSON.stringify(v):String(v);
+  if(/^[=+\-@\t\r]/.test(s)) s="'"+s;
+  return '"'+s.replace(/"/g,'""')+'"';
+}
+function paraCsv(rows){
+  const cols=Object.keys(rows[0]);
+  return '\uFEFF'+[cols.join(';'),...rows.map(r=>cols.map(c=>celula(r[c])).join(';'))].join('\r\n');
+}
+function baixar(nome,conteudo,tipo){
+  const url=URL.createObjectURL(new Blob([conteudo],{type:tipo}));
+  const a=document.createElement('a');a.href=url;a.download=nome;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+function infoBackup(){
+  let d=null;try{d=localStorage.getItem('ultimoBackup');}catch(err){}
+  if(!d) return 'Nenhum backup baixado ainda neste aparelho.';
+  const dias=Math.floor((Date.now()-new Date(d+'T12:00:00').getTime())/864e5);
+  return 'Último backup: '+new Date(d+'T12:00:00').toLocaleDateString('pt-BR')+(dias>30?' (faz mais de 30 dias, faça um novo)':'');
+}
+function backupTab(){
+  $('#v7').innerHTML=`<h2>Exportar planilhas</h2><p><small>Arquivos .csv que abrem no Excel e no Google Planilhas.</small></p>`+
+    EXP.map(x=>`<button class="sec exp" data-t="${x[0]}" data-o="${x[2]}" style="width:100%;margin-bottom:.5rem;text-align:left">Baixar ${esc(x[1])}</button>`).join('')+
+    `<h2>Backup completo</h2><p><small>Um único arquivo com todas as tabelas (pedidos, clientes, preços, despesas, horários, avaliações e suas fotos).</small></p>
+    <button class="full" id="bkp" style="margin-top:0">Baixar backup completo</button>
+    <p id="bkinfo"><small>${esc(infoBackup())}</small></p>
+    <div class="msg erro" style="font-weight:400">Esses arquivos têm nome e telefone dos clientes. Guarde em local seguro e não compartilhe. As fotos de antes e depois ficam no Supabase (Storage) e não entram aqui.</div>`;
+}
+$('#v7').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.classList.contains('exp')){
+    t.disabled=true;
+    try{
+      const rows=await todas(t.dataset.t,t.dataset.o);
+      if(!rows.length) alert('Nenhum registro para exportar.');
+      else baixar(t.dataset.t+'-'+hojeBR()+'.csv',paraCsv(rows),'text/csv;charset=utf-8');
+    }catch(err){alert('Não foi possível exportar. Tente de novo.');}
+    t.disabled=false;
+  }
+  if(t.id==='bkp'){
+    t.disabled=true;t.textContent='Gerando backup...';
+    try{
+      const tabelas={};
+      for(const [nome,ordem] of BKP) tabelas[nome]=await todas(nome,ordem);
+      baixar('backup-lavajato-'+hojeBR()+'.json',JSON.stringify({versao:1,geradoEm:new Date().toISOString(),tabelas}),'application/json');
+      try{localStorage.setItem('ultimoBackup',hojeBR());}catch(err){}
+      $('#bkinfo').innerHTML='<small>'+esc(infoBackup())+'</small>';
+    }catch(err){alert('Não foi possível gerar o backup (falha na tabela "'+esc(err.message)+'"). Confira se arquivo supabase.sql foi executado.');}
+    t.disabled=false;t.textContent='Baixar backup completo';
+  }
+});
+
+/* ---------- AVALIAÇÕES (ADMIN) ---------- */
+async function avalAdmin(){
+  const {data,error}=await db.from('avaliacoes').select('*, pedidos(nome,servico_nome,veiculo), avaliacao_fotos(imagem)').order('criado_em',{ascending:false}).limit(50);
+  if(error){$('#v6').innerHTML='<p class="vazio">Erro ao carregar as avaliações. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  const ord={pendente:0,aprovada:1,oculta:2};data.sort((x,y)=>ord[x.status]-ord[y.status]);
+  const pend=data.filter(x=>x.status==='pendente').length;
+  $('#v6').innerHTML=`<p><b>${pend}</b> ${pend===1?'avaliação aguardando aprovação':'avaliações aguardando aprovação'}.</p>`+(data.length?data.map(a=>`<div class="card" data-id="${a.id}"><b>${'★'.repeat(a.nota)}</b> <small>${esc(a.status)}</small><br>${esc(a.pedidos?a.pedidos.nome:'')} · ${esc(a.pedidos?a.pedidos.servico_nome:'')} · ${esc(a.pedidos?a.pedidos.veiculo:'')}${a.comentario?`<p style="margin:.4rem 0">${esc(a.comentario)}</p>`:''}${a.avaliacao_fotos.length?`<div class="row">${a.avaliacao_fotos.map(f=>`<img src="${esc(f.imagem)}" alt="Foto do cliente" style="flex:0 0 96px;width:96px;height:96px;object-fit:cover;border-radius:6px">`).join('')}</div>`:''}<div class="row" style="margin-top:.6rem"><button class="aap" ${a.status==='aprovada'?'disabled':''}>Aprovar</button><button class="sec aoc" ${a.status==='oculta'?'disabled':''}>Ocultar</button><button class="sec aex">Excluir</button></div></div>`).join(''):'<p class="vazio">Nenhuma avaliação ainda.</p>');
+}
+$('#v6').addEventListener('click',async e=>{
+  const t=e.target,c=t.closest('.card'); if(!c) return;
+  const id=c.dataset.id; let r;
+  if(t.classList.contains('aap')) r=await db.from('avaliacoes').update({status:'aprovada'}).eq('id',id);
+  else if(t.classList.contains('aoc')) r=await db.from('avaliacoes').update({status:'oculta'}).eq('id',id);
+  else if(t.classList.contains('aex')){ if(!confirm('Excluir esta avaliação e as fotos?')) return; r=await db.from('avaliacoes').delete().eq('id',id); }
+  else return;
+  if(r.error) alert('Não foi possível salvar.'); else avalAdmin();
+});
+
+/* ---------- HORÁRIOS ---------- */
+/* ---------- AVISO NO SITE ---------- */
+async function avisoSite(){
+  const {data}=await db.rpc('aviso_publico');
+  const t=data&&data[0]&&data[0].o_texto,el=$('#recado');
+  el.textContent=t||''; el.classList.toggle('oculto',!t);
+}
+setInterval(()=>{if(CONFIGURADO&&!$('#cliente').classList.contains('oculto'))avisoSite();},300000);
+const pvIn=iso=>iso?new Date(iso).toLocaleString('sv-SE',{timeZone:'America/Porto_Velho'}).slice(0,16).replace(' ','T'):'';
+const pvOut=v=>v?new Date(v+':00-04:00').toISOString():null;
+const pvTxt=x=>new Date(x).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short',timeZone:'America/Porto_Velho'});
+function avStatus(c){
+  if(!c.aviso_ativo||!(c.aviso_texto||'').trim()) return 'Desligado: não aparece no site.';
+  const agora=Date.now(),i=c.aviso_inicio&&new Date(c.aviso_inicio).getTime(),f=c.aviso_fim&&new Date(c.aviso_fim).getTime();
+  if(i&&agora<i) return 'Agendado: começa a aparecer em '+pvTxt(c.aviso_inicio)+'.';
+  if(f&&agora>=f) return 'Encerrado: o prazo terminou em '+pvTxt(c.aviso_fim)+'.';
+  return 'Aparecendo agora no site'+(f?' até '+pvTxt(c.aviso_fim):', até você desligar')+'.';
+}
+function avisoAdm(c){
+  $('#avisoadm').innerHTML=`<h2>Aviso no site</h2><div class="card">
+    <label for="avt" style="margin-top:0">Recado (aparece no topo do site)</label>
+    <textarea id="avt" rows="2" maxlength="200" placeholder="Ex.: Hoje fechamos às 15h">${esc(c.aviso_texto||'')}</textarea>
+    <div class="row"><div><label for="avi">Começa em (opcional)</label><input id="avi" type="datetime-local" value="${esc(pvIn(c.aviso_inicio))}"></div><div><label for="avf">Termina em (opcional)</label><input id="avf" type="datetime-local" value="${esc(pvIn(c.aviso_fim))}"></div></div>
+    <label class="chk" style="margin-top:.8rem"><input type="checkbox" id="ava" ${c.aviso_ativo?'checked':''}> Aviso ligado</label>
+    <p style="margin:.4rem 0"><small id="avst">${esc(avStatus(c))}</small></p>
+    <div class="row"><button id="avsalvar">Salvar aviso</button><button class="sec" id="avhoje">Só hoje</button></div></div>
+    <small>Com as datas preenchidas, o aviso liga e desliga sozinho nos horários marcados. Sem datas, fica no ar até você desligar. "Só hoje" preenche de agora até 23:59; depois toque em Salvar aviso.</small>`;
+}
+$('#v5').addEventListener('click',async e=>{
+  if(e.target.id==='avhoje'){
+    const agora=pvIn(new Date().toISOString());
+    $('#avi').value=agora; $('#avf').value=agora.slice(0,10)+'T23:59'; $('#ava').checked=true; return;
+  }
+  if(e.target.id!=='avsalvar') return;
+  const btn=e.target,texto=$('#avt').value.trim(),ativo=$('#ava').checked,ini=pvOut($('#avi').value),fim=pvOut($('#avf').value);
+  if(ativo&&!texto){alert('Escreva o recado antes de ligar o aviso.');return;}
+  if(ini&&fim&&new Date(fim)<=new Date(ini)){alert('O fim precisa ser depois do começo.');return;}
+  const upd={aviso_texto:texto||null,aviso_ativo:ativo,aviso_inicio:ini,aviso_fim:fim};
+  const {error}=await db.from('config').update(upd).eq('id',1);
+  if(error){btn.textContent='Não foi possível salvar';setTimeout(()=>btn.textContent='Salvar aviso',2200);return;}
+  $('#avst').textContent=avStatus(upd);
+  btn.textContent='Salvo'; setTimeout(()=>btn.textContent='Salvar aviso',1800);
+});
+
+async function horarios(){
+  const {data:c,error}=await db.from('config').select('*').eq('id',1).single();
+  if(error||!c){$('#v5').innerHTML='<p class="vazio">Erro ao carregar os horários. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  const DIAS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+  $('#v5').innerHTML=`<div class="card">
+    <div class="row"><div><label for="ha">Abre às</label><input id="ha" type="time" value="${esc(c.abre.slice(0,5))}"></div><div><label for="hf">Fecha às</label><input id="hf" type="time" value="${esc(c.fecha.slice(0,5))}"></div></div>
+    <label for="hd">Duração de cada lavagem</label><select id="hd">${[30,45,60,90,120].map(m=>`<option value="${m}" ${m===c.duracao_min?'selected':''}>${m} minutos</option>`).join('')}</select>
+    <label for="hv">Carros ao mesmo tempo (vagas por horário)</label><input id="hv" type="number" min="1" max="50" value="${c.vagas}">
+    <label>Dias de funcionamento</label><div class="row">${DIAS.map((d,i)=>`<label class="chk"><input type="checkbox" class="hdia" value="${i}" ${c.dias.includes(i)?'checked':''}> ${d}</label>`).join('')}</div>
+    <button class="full" id="hsalvar">Salvar horários</button></div>
+    <small>Os clientes só veem horários livres. Quando um horário enche, ele some da lista.</small>
+    <div id="fechados"></div><div id="bloqueios"></div><div id="contatosadm"></div><div id="avisoadm"></div><div id="equipeadm"></div><div id="protadm"></div>`;
+  avisoAdm(c);
+  equipeAdm();
+  protAdm(c);
+  contatosAdm();
+  fechados();
+  bloqueios(c);
+}
+$('#v5').addEventListener('click',async e=>{
+  if(e.target.id!=='hsalvar') return;
+  const abre=$('#ha').value,fecha=$('#hf').value,dias=[...document.querySelectorAll('.hdia:checked')].map(x=>Number(x.value));
+  if(!abre||!fecha||fecha<=abre){alert('O horário de fechar precisa ser depois do de abrir.');return;}
+  if(!dias.length){alert('Marque pelo menos um dia de funcionamento.');return;}
+  const {error}=await db.from('config').update({abre,fecha,duracao_min:Number($('#hd').value),vagas:Number($('#hv').value),dias}).eq('id',1);
+  e.target.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>e.target.textContent='Salvar horários',1800);
+});
+
+async function contatosAdm(){
+  const [ct,cf]=await Promise.all([db.from('contatos').select('*').order('ordem').order('id'),db.from('config').select('endereco,instagram').eq('id',1).single()]);
+  if(ct.error||cf.error){$('#contatosadm').innerHTML='<p class="vazio">Erro ao carregar os contatos. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  const cfg=cf.data||{};
+  $('#contatosadm').innerHTML='<h2>Contatos do site</h2><small>O primeiro contato de WhatsApp ativo recebe os pedidos dos clientes. Todos aparecem no rodapé.</small>'+
+    (ct.data.length?ct.data.map((x,i)=>`<div class="card" data-id="${x.id}"><div class="row"><input class="cr" maxlength="40" value="${esc(x.rotulo)}" aria-label="Nome do contato"><input class="ctel" type="tel" value="${esc(fmtTel(x.telefone))}" aria-label="Telefone com DDD"></div>
+      <div class="row" style="margin-top:.5rem"><label class="chk"><input type="checkbox" class="cw" ${x.whatsapp?'checked':''}> É WhatsApp</label><label class="chk"><input type="checkbox" class="ca" ${x.ativo?'checked':''}> Mostrar no site</label></div>
+      <div class="row" style="margin-top:.5rem"><button class="sec csv">Salvar</button><button class="sec cup" ${i===0?'disabled':''}>Tornar principal</button><button class="sec cex">Excluir</button></div></div>`).join(''):'<p class="vazio">Nenhum contato cadastrado: o site usa o número padrão do arquivo index.html.</p>')+
+    `<div class="card"><b>Novo contato</b><div class="row"><input id="cnr" maxlength="40" placeholder="Nome (ex.: Comercial)" aria-label="Nome do contato"><input id="cnt" type="tel" placeholder="(69) 99999-9999" aria-label="Telefone com DDD"></div>
+      <label class="chk" style="margin-top:.5rem"><input type="checkbox" id="cnw" checked> É WhatsApp</label><button class="full" id="cadd2">Adicionar contato</button></div>
+    <h2>Endereço e Instagram</h2><div class="card"><label for="cen">Endereço (opcional)</label><input id="cen" maxlength="200" value="${esc(cfg.endereco||'')}" placeholder="Rua, número, bairro">
+      <label for="cig">Instagram (opcional)</label><input id="cig" maxlength="200" value="${esc(cfg.instagram||'')}" placeholder="https://instagram.com/seulavajato"><button class="full" id="cinfo">Salvar</button></div>`;
+}
+$('#v5').addEventListener('click',async e=>{
+  const t=e.target,c=t.closest('.card'); if(!c&&t.id!=='cinfo') return;
+  const msg='Informe o nome e um telefone com DDD (por exemplo, (69) 99999-9999).';
+  if(t.id==='cadd2'){
+    const tel=normTel($('#cnt').value),rot=$('#cnr').value.trim();
+    if(!tel||!rot){alert(msg);return;}
+    const {data:u}=await db.from('contatos').select('ordem').order('ordem',{ascending:false}).limit(1);
+    const {error}=await db.from('contatos').insert({rotulo:rot,telefone:tel,whatsapp:$('#cnw').checked,ordem:u&&u[0]?u[0].ordem+1:0});
+    if(error) alert('Não foi possível adicionar o contato.'); else contatosAdm();
+  }
+  if(t.classList.contains('csv')){
+    const tel=normTel(c.querySelector('.ctel').value),rot=c.querySelector('.cr').value.trim();
+    if(!tel||!rot){alert(msg);return;}
+    const {error}=await db.from('contatos').update({rotulo:rot,telefone:tel,whatsapp:c.querySelector('.cw').checked,ativo:c.querySelector('.ca').checked}).eq('id',c.dataset.id);
+    t.textContent=error?'Erro':'Salvo'; setTimeout(()=>t.textContent='Salvar',1500);
+  }
+  if(t.classList.contains('cup')){
+    const {data:u}=await db.from('contatos').select('ordem').order('ordem').limit(1);
+    const {error}=await db.from('contatos').update({ordem:(u&&u[0]?u[0].ordem:0)-1}).eq('id',c.dataset.id);
+    if(error) alert('Não foi possível alterar.'); else contatosAdm();
+  }
+  if(t.classList.contains('cex')){
+    if(!confirm('Excluir este contato?')) return;
+    const {error}=await db.from('contatos').delete().eq('id',c.dataset.id);
+    if(error) alert('Não foi possível excluir.'); else contatosAdm();
+  }
+  if(t.id==='cinfo'){
+    const ig=$('#cig').value.trim();
+    if(ig&&!/^https:\/\/\S+$/.test(ig)){alert('O Instagram precisa ser um link começando com https://');return;}
+    const {error}=await db.from('config').update({endereco:$('#cen').value.trim()||null,instagram:ig||null}).eq('id',1);
+    t.textContent=error?'Não foi possível salvar':'Salvo'; setTimeout(()=>t.textContent='Salvar',1800);
+  }
+});
+
+async function fechados(){
+  const hoje=new Date().toLocaleDateString('en-CA',{timeZone:'America/Porto_Velho'});
+  const {data,error}=await db.from('dias_fechados').select('*').gte('dia',hoje).order('dia');
+  if(error){$('#fechados').innerHTML='<p class="vazio">Erro ao carregar os dias fechados. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  $('#fechados').innerHTML='<h2>Dias fechados</h2>'+(data.length?data.map(x=>`<div class="serv"><span>${new Date(x.dia+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}${x.motivo?' · '+esc(x.motivo):''}</span><button class="sec rmf" data-dia="${esc(x.dia)}">Reabrir</button></div>`).join(''):'<p class="vazio">Nenhum dia fechado. Cadastre feriados e folgas abaixo.</p>')+
+    `<div class="card row"><input id="fd" type="date" min="${hoje}" aria-label="Dia a fechar"><input id="fm" maxlength="60" placeholder="Motivo (opcional)" aria-label="Motivo"><button id="fadd">Fechar dia</button></div>`;
+}
+$('#v5').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='fadd'){
+    const dia=$('#fd').value; if(!dia) return;
+    const {error}=await db.from('dias_fechados').upsert({dia,motivo:$('#fm').value.trim()||null});
+    if(error){alert('Não foi possível fechar o dia.');return;}
+    const ini=new Date(dia+'T00:00:00-04:00'),fim=new Date(ini.getTime()+864e5);
+    const {count}=await db.from('pedidos').select('id',{count:'exact',head:true}).neq('status','cancelado').gte('data_hora',ini.toISOString()).lt('data_hora',fim.toISOString());
+    if(count) alert('Atenção: já existem '+count+' pedido(s) marcado(s) para este dia. Avise esses clientes e cancele ou remarque os pedidos.');
+    fechados();
+  }
+  if(t.classList.contains('rmf')){
+    const {error}=await db.from('dias_fechados').delete().eq('dia',t.dataset.dia);
+    if(error) alert('Não foi possível reabrir o dia.'); else fechados();
+  }
+});
+
+/* ---------- BLOQUEAR SÓ PARTE DO DIA ---------- */
+let bloqCfg=null;
+const hm=t=>String(t).slice(0,5);
+async function bloqueios(c){
+  if(c) bloqCfg=c;
+  const hoje=hojeBR();
+  const {data,error}=await db.from('bloqueios_horario').select('*').gte('dia',hoje).order('dia').order('inicio');
+  if(error){$('#bloqueios').innerHTML='<h2>Fechar só parte do dia</h2><p class="vazio">Erro ao carregar. Confira se o arquivo supabase.sql foi executado.</p>';return;}
+  $('#bloqueios').innerHTML='<h2>Fechar só parte do dia</h2>'+(data.length?data.map(x=>`<div class="serv"><span>${new Date(x.dia+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'2-digit'})} · ${hm(x.inicio)} às ${hm(x.fim)}${x.motivo?' · '+esc(x.motivo):''}</span><button class="sec bdrm" data-id="${x.id}">Liberar</button></div>`).join(''):'<p class="vazio">Nenhum horário bloqueado.</p>')+
+  `<div class="card"><small>Para fechar mais cedo, como "hoje fechamos às 15h", escolha o dia, comece às 15:00 e termine no horário de fechamento. Os horários que encostam nessa faixa deixam de aparecer no site.</small>
+    <div class="row" style="margin-top:.5rem"><div><label for="bdd" style="margin:0 0 .15rem">Dia</label><input id="bdd" type="date" min="${hoje}"></div></div>
+    <div class="row" style="margin-top:.5rem"><div><label for="bdi" style="margin:0 0 .15rem">Das</label><input id="bdi" type="time" value="12:00"></div><div><label for="bdf" style="margin:0 0 .15rem">Até</label><input id="bdf" type="time" value="${esc(hm(bloqCfg?bloqCfg.fecha:'17:00'))}"></div></div>
+    <label for="bdm" style="margin-bottom:.15rem">Motivo (opcional)</label><input id="bdm" maxlength="60" placeholder="Ex.: Fechamos mais cedo">
+    <button class="full" id="bdadd">Bloquear horários</button></div>`;
+}
+$('#v5').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='bdadd'){
+    const dia=$('#bdd').value,ini=$('#bdi').value,fim=$('#bdf').value;
+    if(!dia||!ini||!fim){alert('Informe o dia e os horários.');return;}
+    if(ini>=fim){alert('O horário final precisa ser depois do inicial.');return;}
+    const {error}=await db.from('bloqueios_horario').insert({dia,inicio:ini,fim:fim,motivo:$('#bdm').value.trim()||null});
+    if(error){alert('Não foi possível bloquear.');return;}
+    const dur=bloqCfg?bloqCfg.duracao_min:60,a=new Date(dia+'T'+ini+':00-04:00'),b=new Date(dia+'T'+fim+':00-04:00');
+    const {count}=await db.from('pedidos').select('id',{count:'exact',head:true}).neq('status','cancelado').gt('data_hora',new Date(a.getTime()-dur*60000).toISOString()).lt('data_hora',b.toISOString());
+    if(count) alert('Atenção: já existem '+count+' pedido(s) nessa faixa. Eles continuam marcados: avise os clientes e remarque ou cancele.');
+    bloqueios();
+  }
+  if(t.classList.contains('bdrm')){
+    const {error}=await db.from('bloqueios_horario').delete().eq('id',t.dataset.id);
+    if(error) alert('Não foi possível liberar.'); else bloqueios();
+  }
+});
+
+/* ---------- FATURAMENTO ---------- */
+/* ---------- HORÁRIOS DE PICO E TEMPO DE LAVAGEM ---------- */
+const DIAS_SEM=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],DIAS_LONGO=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+let picoDias=90;
+function picoHtml(data,dias){
+  const m=Array.from({length:7},()=>new Array(24).fill(0));
+  data.forEach(x=>{if(x.o_dow>=0&&x.o_dow<7&&x.o_hora>=0&&x.o_hora<24) m[x.o_dow][x.o_hora]+=x.o_pedidos;});
+  const tot=m.reduce((t,r)=>t+r.reduce((a,b)=>a+b,0),0);
+  if(!tot) return '<div class="card"><small>Sem pedidos neste período.</small></div>';
+  const horas=[];for(let h=0;h<24;h++) if(m.some(r=>r[h]>0)) horas.push(h);
+  const h0=horas[0],h1=horas[horas.length-1],nc=h1-h0+1;
+  const occ=new Array(7).fill(0),base=new Date(hojeBR()+'T12:00:00');
+  for(let i=0;i<dias;i++) occ[new Date(base.getTime()-i*86400000).getDay()]++;
+  const totD=m.map(r=>r.reduce((a,b)=>a+b,0)),media=totD.map((v,d)=>occ[d]?v/occ[d]:0);
+  const totH=Array.from({length:24},(_,h)=>m.reduce((t,r)=>t+r[h],0));
+  const mx=Math.max(...m.flat());
+  const W=360,L=34,T=18,cw=(W-L-4)/nc,ch=24,H=T+7*ch+4;
+  const mix=t=>{const a=[230,240,242],b=[11,58,74];return 'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';};
+  let g='';
+  for(let h=h0;h<=h1;h++) g+=`<text x="${(L+(h-h0)*cw+cw/2).toFixed(1)}" y="${T-6}" text-anchor="middle" font-size="9" fill="#10252d">${h}h</text>`;
+  for(let d=0;d<7;d++){
+    g+=`<text x="${L-5}" y="${T+d*ch+ch/2+3}" text-anchor="end" font-size="9" fill="#10252d">${DIAS_SEM[d]}</text>`;
+    for(let h=h0;h<=h1;h++){
+      const v=m[d][h],t=v/mx,x=L+(h-h0)*cw;
+      g+=`<rect x="${x.toFixed(1)}" y="${T+d*ch}" width="${(cw-1.5).toFixed(1)}" height="${ch-1.5}" rx="3" fill="${v?mix(.12+.88*t):'#f3f8f9'}"><title>${DIAS_LONGO[d]}, ${h}h: ${v} ${v===1?'pedido':'pedidos'}</title></rect>`;
+      if(v&&nc<=13) g+=`<text x="${(x+(cw-1.5)/2).toFixed(1)}" y="${T+d*ch+ch/2+3}" text-anchor="middle" font-size="9" fill="${t>.5?'#fff':'#10252d'}">${v}</text>`;
+    }
+  }
+  const dMax=media.indexOf(Math.max(...media)),hMax=totH.indexOf(Math.max(...totH));
+  const comMov=media.map((v,d)=>totD[d]>0?v:Infinity),dMin=comMov.indexOf(Math.min(...comMov));
+  const fm=v=>v.toFixed(1).replace('.',',');
+  return `<div class="card"><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Mapa de pedidos por dia da semana e hora" style="display:block">${g}</svg>
+    <p style="margin:.6rem 0 0"><small>Quanto mais escuro, mais pedidos. Toque num quadrado para ver o número.</small></p></div>
+    <div class="card"><div>Dia mais cheio: <b>${DIAS_LONGO[dMax]}</b> <small>(média de ${fm(media[dMax])} pedidos por dia)</small></div>
+    <div>Horário mais cheio: <b>${hMax}h</b> <small>(${totH[hMax]} pedidos no período)</small></div>
+    ${dMin!==dMax&&isFinite(comMov[dMin])?`<div>Dia mais fraco: <b>${DIAS_LONGO[dMin]}</b> <small>(média de ${fm(media[dMin])} por dia)</small></div><p style="margin:.5rem 0 0"><small>Uma ideia: divulgar uma promoção para ${DIAS_LONGO[dMin]} usando o Aviso no site.</small></p>`:''}</div>`;
+}
+function tempoHtml(r,dur){
+  if(r.error) return '';
+  const d=r.data||[];
+  let h='<h2>Tempo de lavagem</h2>';
+  if(!d.length) return h+'<div class="card"><small>Ainda sem dados. O tempo é medido quando o pedido passa para "lavando" e depois para "pronto" (ou "entregue"). Isso só vale a partir da atualização do banco e depende de a situação ser marcada na hora.</small></div>';
+  const qt=d.reduce((t,x)=>t+x.o_qtd,0),med=d.reduce((t,x)=>t+x.o_qtd*Number(x.o_mediana),0)/qt;
+  h+='<div class="card">'+d.map(x=>`<div class="serv"><span>${esc(x.o_servico)} <small>× ${x.o_qtd}</small></span><span><b>${Number(x.o_mediana)} min</b> <small>(média ${Number(x.o_media)})</small></span></div>`).join('');
+  if(dur){
+    const dm=Number(dur);
+    h+=`<p style="margin:.6rem 0 0"><small>Cada horário do site reserva ${dm} min. O tempo mediano real, somando todos os serviços, é ${Math.round(med)} min. ${med>dm*1.15?'Está passando do reservado: considere aumentar a duração ou reduzir as vagas por horário (aba Negócio).':med<dm*.7?'Está sobrando tempo: talvez dê para encurtar a duração ou aceitar mais vagas por horário (aba Negócio).':'Está bem alinhado com o reservado.'}</small></p>`;
+  }
+  return h+'<p style="margin:.4rem 0 0"><small>Mediana: metade das lavagens leva menos que isso. Tempos acima de 8 horas são ignorados.</small></p></div>';
+}
+async function picoCarregar(){
+  const box=$('#pico'); if(!box) return;
+  box.innerHTML=`<h2>Dias e horários de pico</h2><div class="card"><label for="picop" style="margin:0 0 .15rem">Período</label><select id="picop">${[30,90,180].map(n=>`<option value="${n}" ${n===picoDias?'selected':''}>Últimos ${n} dias</option>`).join('')}</select></div><div id="picor"><p class="vazio">Carregando...</p></div>`;
+  $('#picop').onchange=e=>{picoDias=Number(e.target.value);picoRender();};
+  picoRender();
+}
+async function picoRender(){
+  const r=$('#picor'),dias=picoDias; if(!r) return;
+  const [a,b,c]=await Promise.all([db.rpc('pico_pedidos',{p_dias:dias}),db.rpc('tempo_lavagem',{p_dias:dias}),db.from('config').select('duracao_min').eq('id',1).single()]);
+  if(dias!==picoDias||!$('#picor')) return;
+  r.innerHTML=a.error?'<p class="vazio">Erro ao carregar. Confira se o arquivo supabase.sql foi executado.</p>':picoHtml(a.data||[],dias)+tempoHtml(b,c.data?c.data.duracao_min:null);
+}
+
+/* ---------- GRÁFICOS DO FINANCEIRO ---------- */
+const brlC=v=>v>=1000?'R$ '+(v/1000).toFixed(v>=10000?0:1).replace('.',',')+' mil':'R$ '+Math.round(v);
+function maxBonito(v){if(v<=0)return 100;const e=Math.pow(10,Math.floor(Math.log10(v))),f=v/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e;}
+function porDia(res,nd){const v=new Array(nd).fill(0),q=new Array(nd).fill(0);(res.data||[]).forEach(x=>{const d=Number(String(x.o_dia).slice(8))-1;if(d>=0&&d<nd){v[d]=Number(x.o_total)||0;q[d]=x.o_pedidos||0;}});return {v,q};}
+function graficosFin(a,m,hoje,gc,gp,ant){
+  if(gc.error||gp.error) return '';
+  const nd=new Date(a,m,0).getDate(),nda=new Date(ant[0],ant[1],0).getDate();
+  const mesAtual=hoje.slice(0,7)===a+'-'+String(m).padStart(2,'0');
+  const lim=mesAtual?Number(hoje.slice(8)):nd;
+  const C=porDia(gc,nd),P=porDia(gp,nda);
+  const totC=C.v.slice(0,lim).reduce((t,x)=>t+x,0),totP=P.v.reduce((t,x)=>t+x,0);
+  const prevSame=mesAtual?P.v.slice(0,Math.min(lim,nda)).reduce((t,x)=>t+x,0):totP;
+  const nomeAnt=new Date(ant[0],ant[1]-1,1).toLocaleDateString('pt-BR',{month:'long'});
+  const dd=i=>String(i+1).padStart(2,'0')+'/'+String(m).padStart(2,'0');
+  /* barras: faturamento por dia */
+  const W=360,H=180,L=44,R=6,T=10,B=22,pw=W-L-R,ph=H-T-B;
+  const mx=maxBonito(Math.max(...C.v));
+  const bw=pw/nd,y=v=>T+ph-(v/mx)*ph;
+  let g1=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-R}" y1="${y(mx*f)}" y2="${y(mx*f)}" stroke="#cfdfe3" stroke-width="1"/><text x="${L-4}" y="${y(mx*f)+3}" text-anchor="end" font-size="9" fill="#10252d">${f===0?'0':brlC(mx*f)}</text>`).join('');
+  g1+=C.v.map((v,i)=>v>0?`<rect x="${(L+i*bw+bw*.15).toFixed(1)}" y="${y(v).toFixed(1)}" width="${(bw*.7).toFixed(1)}" height="${(T+ph-y(v)).toFixed(1)}" fill="#0b3a4a" rx="1"><title>${dd(i)}: ${brl(v)} · ${C.q[i]} ${C.q[i]===1?'pedido':'pedidos'}</title></rect>`:'').join('');
+  g1+=[1,5,10,15,20,25,nd].filter((d,i,ar)=>ar.indexOf(d)===i&&(d===nd||nd-d>=2)).map(d=>`<text x="${(L+(d-1)*bw+bw/2).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="9" fill="#10252d">${d}</text>`).join('');
+  const melhor=C.v.reduce((b,v,i)=>v>C.v[b]?i:b,0),dias=C.v.filter(v=>v>0).length;
+  /* linhas: acumulado do mês vs mês anterior */
+  const acum=(arr,n)=>{let t=0;return arr.slice(0,n).map(v=>(t+=v));};
+  const AC=acum(C.v,lim),AP=acum(P.v,nda),nx=Math.max(nd,nda);
+  const mx2=maxBonito(Math.max(AC[AC.length-1]||0,AP[AP.length-1]||0)),x2=i=>L+(i/(nx-1))*pw,y2=v=>T+ph-(v/mx2)*ph;
+  const pts=arr=>arr.map((v,i)=>x2(i).toFixed(1)+','+y2(v).toFixed(1)).join(' ');
+  let g2=[0,.5,1].map(f=>`<line x1="${L}" x2="${W-R}" y1="${y2(mx2*f)}" y2="${y2(mx2*f)}" stroke="#cfdfe3" stroke-width="1"/><text x="${L-4}" y="${y2(mx2*f)+3}" text-anchor="end" font-size="9" fill="#10252d">${f===0?'0':brlC(mx2*f)}</text>`).join('');
+  g2+=`<polyline points="${pts(AP)}" fill="none" stroke="#8aa6ae" stroke-width="2" stroke-dasharray="4 3"/>`+(AC.length?`<polyline points="${pts(AC)}" fill="none" stroke="#0b3a4a" stroke-width="2.5"/>`:'');
+  g2+=[1,5,10,15,20,25,nx].filter((d,i,ar)=>ar.indexOf(d)===i&&(d===nx||nx-d>=2)).map(d=>`<text x="${x2(d-1).toFixed(1)}" y="${H-6}" text-anchor="middle" font-size="9" fill="#10252d">${d}</text>`).join('');
+  /* variação */
+  const dif=prevSame>0?(totC-prevSame)/prevSame*100:null;
+  const varTxt=dif===null?'<small>Sem faturamento no mês anterior para comparar.</small>':`<b style="color:var(${dif<0?'--erro':'--ok'})">${dif>=0?'+':'−'}${Math.abs(dif).toFixed(1).replace('.',',')}%</b> <small>${dif>=0?'acima':'abaixo'} do mesmo período de ${nomeAnt}</small>`;
+  return `<h2>Faturamento por dia</h2><div class="card">
+    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Gráfico de barras do faturamento por dia do mês. Total de ${brl(totC)}." style="display:block">${g1}</svg>
+    ${totC>0?`<small>Melhor dia: ${dd(melhor)} com ${brl(C.v[melhor])} · ${dias} ${dias===1?'dia com pedidos':'dias com pedidos'} · média de ${brl(totC/dias)} por dia com pedidos</small>`:'<small>Sem faturamento neste mês.</small>'}</div>
+    <h2>Comparação com ${esc(nomeAnt)}</h2><div class="card">
+    <div class="row"><div><small>${mesAtual?'Este mês, até o dia '+lim:'Este mês'}</small><br><b>${brl(totC)}</b></div><div><small>${esc(nomeAnt)}${mesAtual?', mesmo período':''}</small><br><b>${brl(prevSame)}</b></div></div>
+    <p style="margin:.5rem 0">${varTxt}</p>
+    <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Gráfico de linhas do faturamento acumulado: este mês comparado com ${esc(nomeAnt)}." style="display:block">${g2}</svg>
+    <small><span style="color:#0b3a4a">━</span> Este mês (acumulado) &nbsp; <span style="color:#8aa6ae">╍</span> ${esc(nomeAnt)} (acumulado: ${brl(totP)} no mês todo)</small></div>`;
+}
+async function faturamento(){
+  const hoje=new Date().toLocaleDateString('en-CA',{timeZone:'America/Porto_Velho'});
+  const mes=($('#mes')&&$('#mes').value)||hoje.slice(0,7);
+  const [a,m]=mes.split('-').map(Number);
+  const ini=`${mes}-01`,prox=m===12?`${a+1}-01-01`:`${a}-${String(m+1).padStart(2,'0')}-01`;
+  const ant=m===1?[a-1,12]:[a,m-1];
+  const [pd,dp,cm,sf,gc,gp]=await Promise.all([
+    db.from('pedidos').select('servico_nome,preco,taxa,desconto,pago').gte('data_hora',new Date(a,m-1,1).toISOString()).lt('data_hora',new Date(a,m,1).toISOString()).neq('status','cancelado'),
+    db.from('despesas').select('*').gte('data',ini).lt('data',prox).order('data',{ascending:false}),
+    db.rpc('comissao_mensal',{p_ano:a,p_mes:m}),
+    db.from('pedidos').select('id',{count:'exact',head:true}).eq('status','entregue').is('funcionario_id',null).gte('data_hora',new Date(ini+'T00:00:00-04:00').toISOString()).lt('data_hora',new Date(prox+'T00:00:00-04:00').toISOString()),
+    db.rpc('faturamento_diario',{p_ano:a,p_mes:m}),
+    db.rpc('faturamento_diario',{p_ano:ant[0],p_mes:ant[1]})]);
+  if(pd.error){$('#v4').innerHTML='<p class="vazio">Erro ao carregar o financeiro.</p>';return;}
+  let tot=0,rec=0,txs=0,dsc=0;const por={};
+  pd.data.forEach(x=>{const v=Number(x.preco)||0,tx=Number(x.taxa)||0,ds=Number(x.desconto)||0;tot+=v+tx-ds;txs+=tx;dsc+=ds;if(x.pago)rec+=v+tx-ds;const k=x.servico_nome||'—';por[k]=por[k]||{q:0,v:0};por[k].q++;por[k].v+=v;});
+  const desp=dp.error?null:dp.data,totD=desp?desp.reduce((s,x)=>s+Number(x.valor),0):0;
+  const lucro=rec-totD,cor=v=>v<0?' style="color:var(--erro)"':'';
+  const cmTot=cm.error||!cm.data?0:cm.data.reduce((t,x)=>t+Number(x.o_comissao),0),semF=sf.error?0:(sf.count||0);
+  const cmHtml=cm.error||!cm.data||(!cm.data.length&&!semF)?'':'<h2>Comissões do mês</h2>'+(cm.data.length?cm.data.map(x=>`<div class="serv"><span>${esc(x.o_nome)} <small>× ${x.o_lavagens} ${x.o_lavagens===1?'lavagem':'lavagens'} · ${x.o_tipo==='pct'?Number(x.o_valor)+'%':brl(x.o_valor)+' por lavagem'}</small></span><span class="preco">${brl(x.o_comissao)}</span></div>`).join('')+`<div class="serv"><span><b>Total de comissões</b></span><span class="preco">${brl(cmTot)}</span></div>`:'')+(semF>0?`<p><small>${semF} ${semF===1?'lavagem entregue sem funcionário marcado':'lavagens entregues sem funcionário marcado'} (não entra${semF===1?'':'m'} na comissão).</small></p>`:'')+'<p><small>Conta só pedidos marcados como entregue, sobre o valor do serviço menos o desconto (sem a taxa de leva e traz).</small></p>';
+  const grafHtml=graficosFin(a,m,hoje,gc,gp,ant);
+  const CATS=['Produtos de limpeza','Água e luz','Aluguel','Equipamentos','Funcionário','Outros'];
+  $('#v4').innerHTML=`<label for="mes">Mês</label><input id="mes" type="month" value="${mes}">
+    <div class="card" style="margin-top:1rem"><small>Faturado</small><div class="preco" style="font-size:1.8rem">${brl(tot)}</div>
+    <div class="row" style="margin-top:.5rem"><div><small>Recebido</small><br><b>${brl(rec)}</b></div><div><small>A receber</small><br><b>${brl(tot-rec)}</b></div><div><small>Pedidos</small><br><b>${pd.data.length}</b></div></div></div>
+    <div class="card"><small>Lucro do mês (recebido − despesas)</small><div class="preco" style="font-size:1.8rem"${cor(lucro)}>${brl(lucro)}</div>
+    <div class="row" style="margin-top:.5rem"><div><small>Despesas</small><br><b>${brl(totD)}</b></div><div><small>Lucro se tudo for pago</small><br><b${cor(tot-totD)}>${brl(tot-totD)}</b></div></div></div>
+    ${grafHtml}<h2>Por serviço</h2>`+(pd.data.length?Object.entries(por).sort((x,y)=>y[1].v-x[1].v).map(([k,o])=>`<div class="serv"><span>${esc(k)} <small>× ${o.q}</small></span><span class="preco">${brl(o.v)}</span></div>`).join(''):'<p class="vazio">Nenhum pedido neste mês.</p>')+
+    (txs>0?`<div class="serv"><span>Taxas de leva e traz</span><span class="preco">${brl(txs)}</span></div>`:'')+(dsc>0?`<div class="serv"><span>Descontos concedidos</span><span class="preco">−${brl(dsc)}</span></div>`:'')+cmHtml+'<h2>Despesas do mês</h2>'+(desp===null?'<p class="vazio">Erro ao carregar as despesas. Confira se o arquivo supabase.sql foi executado.</p>':
+      (desp.length?desp.map(x=>`<div class="serv"><span>${new Date(x.data+'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})} · ${esc(x.descricao)} <small>${esc(x.categoria)}</small></span><span class="preco">${brl(x.valor)} <button class="sec dexc" data-id="${x.id}">Excluir</button></span></div>`).join(''):'<p class="vazio">Nenhuma despesa lançada neste mês.</p>')+
+      `<div class="card"><label for="dd">Data</label><input id="dd" type="date" value="${hoje}">
+      <label for="dds">Descrição</label><input id="dds" maxlength="80" placeholder="Ex.: Shampoo automotivo">
+      <label for="dc">Categoria</label><select id="dc">${CATS.map(c=>`<option>${c}</option>`).join('')}</select>
+      <label for="dv">Valor (R$)</label><input id="dv" type="number" step="0.01" min="0.01">
+      <button class="full" id="dadd">Lançar despesa</button></div><div id="pico"></div>`);
+  $('#mes').onchange=faturamento;
+  picoCarregar();
+}
+$('#v4').addEventListener('click',async e=>{
+  const t=e.target;
+  if(t.id==='dadd'){
+    const descricao=$('#dds').value.trim(),valor=$('#dv').value,data=$('#dd').value;
+    if(!descricao||!data||!(Number(valor)>0)){alert('Informe a data, a descrição e um valor maior que zero.');return;}
+    const {error}=await db.from('despesas').insert({data,descricao,categoria:$('#dc').value,valor});
+    if(error) alert('Não foi possível lançar a despesa.'); else faturamento();
+  }
+  if(t.classList.contains('dexc')){
+    if(!confirm('Excluir esta despesa?')) return;
+    const {error}=await db.from('despesas').delete().eq('id',t.dataset.id);
+    if(error) alert('Não foi possível excluir.'); else faturamento();
+  }
+});
+
+const pedF={q:'',de:'',ate:'',st:'',pg:''};let pedLim=100,pedSeq=0,pedT;
+async function pedidos(){
+  const seq=++pedSeq;
+  let qb=db.from('pedidos').select('*',{count:'exact'});
+  const q=pedF.q.replace(/[,()*%\\"]/g,' ').replace(/\s+/g,' ').trim();
+  if(q){
+    const dig=q.replace(/\D/g,'');
+    const campos=['nome','veiculo','servico_nome','codigo','telefone'].map(c=>c+'.ilike.*'+q+'*');
+    if(dig.length>=4&&dig!==q) campos.push('telefone.ilike.*'+dig+'*');
+    qb=qb.or(campos.join(','));
+  }
+  if(pedF.de) qb=qb.gte('data_hora',new Date(pedF.de+'T00:00:00').toISOString());
+  if(pedF.ate){const d=new Date(pedF.ate+'T00:00:00');d.setDate(d.getDate()+1);qb=qb.lt('data_hora',d.toISOString());}
+  if(pedF.st==='abertos') qb=qb.in('status',['novo','lavando','pronto']); else if(pedF.st) qb=qb.eq('status',pedF.st);
+  if(pedF.pg==='nao') qb=qb.eq('pago',false).neq('status','cancelado'); else if(pedF.pg==='sim') qb=qb.eq('pago',true);
+  const {data,error,count}=await qb.order('criado_em',{ascending:false}).range(0,pedLim-1);
+  if(seq!==pedSeq) return;
+  if(error){$('#v1lista').innerHTML='<p class="vazio">Erro ao carregar pedidos.</p>';return;}
+  const filtrado=!!(q||pedF.de||pedF.ate||pedF.st||pedF.pg);
+  const total=count??data.length;
+  $('#v1info').textContent=total?('Mostrando '+data.length+' de '+total+(total===1?' pedido':' pedidos')):'';
+  $('#v1mais').classList.toggle('oculto',data.length>=total);
+  const [fdR,cfgR]=await Promise.all([db.rpc('fidelidade_clientes'),db.from('config').select('fidelidade_a_cada,fidelidade_pct').eq('id',1).single(),carregaFunc()]);
+  fdMap={};(fdR.data||[]).forEach(x=>{fdMap[x.o_tel]=x;});
+  fdCfg=(cfgR.data)||{fidelidade_a_cada:0,fidelidade_pct:100};
+  pedAdm=data;
+  $('#v1lista').innerHTML=data.length?data.map(p=>`<div class="card" data-id="${p.id}">
+    <b>${esc(p.servico_nome)}</b> · ${brl(Number(p.preco)+Number(p.taxa||0)-Number(p.desconto||0))}${p.desconto>0?` <small>(desconto de ${brl(p.desconto)})</small>`:''}${p.taxa>0?` <small>(com taxa de ${brl(p.taxa)})</small>`:''}<br>
+    ${esc(p.nome)} · <a href="https://wa.me/55${esc(p.telefone.replace(/\D/g,'').replace(/^55/,''))}" target="_blank" rel="noopener">${esc(p.telefone)}</a><br>
+    ${esc(p.veiculo)} <small>· cód. ${esc(p.codigo)}</small>${p.leva_traz?`<br><b>Leva e traz:</b> ${esc(p.endereco)} <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.endereco||'')}" target="_blank" rel="noopener">Mapa</a>`:''}<br><small>${new Date(p.data_hora).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'})}${p.obs?' · '+esc(p.obs):''}</small>
+    <div class="row" style="margin-top:.6rem">
+      <select class="st" aria-label="Situação">${STATUS.map(s=>`<option ${s===p.status?'selected':''}>${s}</option>`).join('')}</select>
+      <label class="chk"><input type="checkbox" class="pg" ${p.pago?'checked':''}> Pago</label>
+      <button class="sec fbtn">Fotos</button>
+      <button class="sec wpp">Avisar cliente</button>
+      ${['entregue','cancelado'].includes(p.status)?'':'<button class="sec rem">Remarcar</button>'}
+      ${(!p.cliente_id&&soDig(p.telefone).length>=8)?'<button class="sec blq">Bloquear telefone</button>':''}
+      <button class="sec vist">${vistRotulo(p)}</button>
+      <button class="sec hist">Histórico</button>
+      ${selFunc(p)}
+      <div class="rpanel oculto" style="flex:1 1 100%"></div>
+      <div class="vpanel oculto" style="flex:1 1 100%"></div>
+      <div class="hpanel oculto" style="flex:1 1 100%"></div>
+      <div style="flex:1 1 100%">${fdBloco(p)}</div>
+      <div class="fpanel oculto" style="flex:1 1 100%"></div>
+    </div></div>`).join(''):(filtrado?'<p class="vazio">Nenhum pedido encontrado com esses filtros.</p>':'<p class="vazio">Nenhum pedido ainda. Compartilhe o link do site com os clientes.</p>');
+}
+$('#pfq').addEventListener('input',e=>{pedF.q=e.target.value;clearTimeout(pedT);pedT=setTimeout(()=>{pedLim=100;pedidos();},350);});
+$('#pf').addEventListener('change',e=>{
+  const k={pfde:'de',pfate:'ate',pfst:'st',pfpg:'pg'}[e.target.id]; if(!k) return;
+  pedF[k]=e.target.value; pedLim=100; pedidos();
+});
+$('#pflimpar').addEventListener('click',()=>{
+  Object.keys(pedF).forEach(k=>pedF[k]='');
+  $('#pfq').value='';$('#pfde').value='';$('#pfate').value='';$('#pfst').value='';$('#pfpg').value='';
+  pedLim=100; pedidos();
+});
+$('#v1mais').addEventListener('click',()=>{pedLim+=100;pedidos();});
+$('#v1').addEventListener('change',async e=>{
+  const c=e.target.closest('.card'); if(!c||!(e.target.classList.contains('st')||e.target.classList.contains('pg'))) return;
+  const {error}=await db.from('pedidos').update({status:c.querySelector('.st').value,pago:c.querySelector('.pg').checked}).eq('id',c.dataset.id);
+  if(error) alert('Não foi possível salvar. Tente de novo.'); else {const w=c.querySelector('.wpp'); if(w) w.classList.remove('sec');}
+});
+
+async function listaServicos(){
+  const {data,error}=await db.from('servicos').select('*').order('nome');
+  if(error){$('#v2').innerHTML='<p class="vazio">Erro ao carregar serviços.</p>';return;}
+  $('#v2').innerHTML='<p><small>Edite o nome, o valor e a descrição e toque em Salvar. Para tirar um serviço do site sem perder o histórico, desmarque "Ativo" e salve.</small></p>'+data.map(s=>`<div class="card row" data-id="${s.id}">
+    <input class="n" value="${esc(s.nome)}" aria-label="Nome do serviço">
+    <input class="v" type="number" step="0.01" min="0" value="${s.preco}" aria-label="Valor em reais" style="max-width:110px">
+    <input class="d" maxlength="140" value="${esc(s.descricao||'')}" placeholder="Descrição para o cliente (opcional)" aria-label="Descrição do serviço" style="flex:1 1 100%">
+    <label class="chk"><input type="checkbox" class="a" ${s.ativo?'checked':''}> Ativo</label>
+    <button class="sec salvar">Salvar</button></div>`).join('')+
+  `<h2>Novo serviço</h2><div class="card row"><input id="nn" placeholder="Nome (ex.: Lavagem completa)"><input id="nv" type="number" step="0.01" min="0" placeholder="Valor" style="max-width:110px"><input id="nd" maxlength="140" placeholder="Descrição para o cliente (opcional)" aria-label="Descrição do novo serviço" style="flex:1 1 100%"><button id="add">Adicionar</button></div><div id="ltcfg"></div>`;
+  ltAdmin();
+}
+$('#v2').addEventListener('click',async e=>{
+  if(e.target.classList.contains('salvar')){
+    const c=e.target.closest('.card');
+    const {error}=await db.from('servicos').update({nome:c.querySelector('.n').value.trim(),preco:c.querySelector('.v').value,descricao:c.querySelector('.d').value.trim()||null,ativo:c.querySelector('.a').checked}).eq('id',c.dataset.id);
+    e.target.textContent=error?'Erro':'Salvo'; setTimeout(()=>e.target.textContent='Salvar',1500);
+  }
+  if(e.target.id==='add'){
+    const nome=$('#nn').value.trim(),preco=$('#nv').value; if(!nome||preco==='') return;
+    const {error}=await db.from('servicos').insert({nome,preco,descricao:$('#nd').value.trim()||null});
+    if(error) alert('Não foi possível adicionar.'); else listaServicos();
+  }
+});
+
+rodape();
+rota();
+</script>
+</body>
+</html>
